@@ -22,8 +22,12 @@ export class FtpService {
   }
 
   async bootstrap() {
-    this.initFtpClient();
-    //console.log(this.getDirectories(this.path));
+    await this.initFtpClient();
+    await this.filesUploader();
+  }
+
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async filesUploader() {
     const yearsPath = this.getDirectories(this.path);
     for (let yearsIndex = 0; yearsIndex < yearsPath.length; yearsIndex++) {
       //console.log(yearsPath[i]);
@@ -38,35 +42,58 @@ export class FtpService {
         const daysPath = this.getDirectories(
           path.join(this.path, yearsPath[yearsIndex], monthsPath[monthsIndex]),
         );
-        console.log(daysPath);
+        //console.log(daysPath);
         for (let daysIndex = 0; daysIndex < daysPath.length; daysIndex++) {
-          console.log(daysPath[daysIndex]);
-
-          await this.ftpClient.ensureDir(
-            `${yearsPath[yearsIndex]},${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
+          console.log(
+            `/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
           );
 
-          // const files = fs.readdirSync(
-          //   path.join(
-          //     this.path,
-          //     yearsPath[yearsIndex],
-          //     monthsPath[monthsIndex],
-          //     daysPath[daysIndex],
-          //   ),
-          // );
-          // console.log(files);
+          const files = fs.readdirSync(
+            path.join(
+              this.path,
+              yearsPath[yearsIndex],
+              monthsPath[monthsIndex],
+              daysPath[daysIndex],
+            ),
+          );
+          console.log(files);
+          await this.ftpClient.ensureDir(
+            `/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
+          );
+          for (let i = 0; i < files.length; i++) {
+            await this.ftpClient.uploadFrom(
+              path.join(
+                this.path,
+                yearsPath[yearsIndex],
+                monthsPath[monthsIndex],
+                daysPath[daysIndex],
+                files[i],
+              ),
+              `${files[i]}`,
+            );
+            fs.unlinkSync(
+              path.join(
+                this.path,
+                yearsPath[yearsIndex],
+                monthsPath[monthsIndex],
+                daysPath[daysIndex],
+                files[i],
+              ),
+            );
+          }
         }
       }
     }
   }
-
-  initFtpClient() {
-    this.ftpClient.access({
+  async initFtpClient() {
+    await this.ftpClient.access({
       host: process.env.FTP_HOST,
       user: process.env.FTP_USERNAME,
       password: process.env.FTP_PASSWORD,
       type: 'ftp',
     });
+    console.log(await this.ftpClient.list());
+    //await this.ftpClient.ensureDir("my/remote/directory")
   }
 
   // @Cron(CronExpression.EVERY_30_SECONDS)
@@ -80,37 +107,7 @@ export class FtpService {
   }
 
   getDirectories(path) {
-    console.log(path);
+    //console.log(path);
     return fs.readdirSync(path);
   }
-  // ftpTreeConfiguration() {
-  //   const date = new Date();
-  //   const yearPath = date.getFullYear().toString();
-  //   const monthPath = (date.getMonth() + 1).toString();
-  //   const dayPath = date.getDate().toString();
-  //   this.ftpFolder = `${yearPath}/${monthPath}/${dayPath}`;
-  //   this.ftpClient.exist(yearPath, function (exist) {
-  //     if (!exist) {
-  //       this.ftpClient.mkdir(yearPath, function (err) {});
-  //     }
-  //   });
-
-  //   this.ftpClient.exist(`${yearPath}/${monthPath}`, function (exist) {
-  //     if (!exist) {
-  //       this.ftpClient.mkdir(`${yearPath}/${monthPath}`, function (err) {});
-  //     }
-  //   });
-
-  //   this.ftpClient.exist(
-  //     `${yearPath}/${monthPath}/${dayPath}`,
-  //     function (exist) {
-  //       if (!exist) {
-  //         this.ftpClient.mkdir(
-  //           `${yearPath}/${monthPath}/${dayPath}`,
-  //           function (err) {},
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
 }
