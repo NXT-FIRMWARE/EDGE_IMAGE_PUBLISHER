@@ -25,10 +25,10 @@ export class SaverService {
     this.bootstrap();
   }
   bootstrap() {
-    setInterval(async () => {
-      this.logger.log('[d] trying to capture image');
-      await this.captureImage();
-    }, this.deltaTime);
+    // setInterval(async () => {
+    //   this.logger.log('[d] trying to capture image');
+    //   this.captureImage();
+    // }, this.deltaTime);
   }
   getCurrentImagePath() {
     const date = new Date();
@@ -77,7 +77,7 @@ export class SaverService {
   //   this.captureImage();
   // }
 
-  async captureImage() {
+  captureImage() {
     this.currentImagePath = this.getCurrentImagePath();
     console.log(
       path.join(
@@ -86,7 +86,7 @@ export class SaverService {
         `${this.currentImagePath.imageFilename}.png`,
       ),
     );
-    await this.camera.capture(
+    this.camera.capture(
       path.join(
         this.path,
         this.currentImagePath.imageFolderPath,

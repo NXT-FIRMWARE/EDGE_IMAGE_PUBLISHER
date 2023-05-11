@@ -20,9 +20,8 @@ export class FtpService {
   }
 
   async bootstrap() {
-    //await this.initFtpClient();
+    await this.initFtpClient();
     setInterval(async () => {
-      await this.initFtpClient();
       await this.filesUploader();
     }, 1000 * 10);
     //await this.filesUploader();
