@@ -40,7 +40,7 @@ export class SaverService {
     const seconds = date.getSeconds();
     return {
       imageFolderPath: `${yearPath}/${monthPath}/${dayPath}`,
-      imageFilename: `${new Date().toString()}`,
+      imageFilename: `${yearPath}/${monthPath}/${dayPath}-${hourPath}-${minutesPath}-${seconds}`,
     };
   }
 
