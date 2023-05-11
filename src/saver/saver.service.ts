@@ -25,10 +25,10 @@ export class SaverService {
     this.bootstrap();
   }
   bootstrap() {
-    // setInterval(async () => {
-    //   this.logger.log('[d] trying to capture image');
-    //   this.captureImage();
-    // }, this.deltaTime);
+    setInterval(async () => {
+      this.logger.log('[d] trying to capture image');
+      this.captureImage();
+    }, this.deltaTime);
   }
   getCurrentImagePath() {
     const date = new Date();

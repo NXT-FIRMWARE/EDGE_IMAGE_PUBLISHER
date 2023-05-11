@@ -23,7 +23,7 @@ export class FtpService {
     await this.initFtpClient();
     setInterval(async () => {
       await this.filesUploader();
-    }, 1000 * 10);
+    }, 5000 * 60);
     //await this.filesUploader();
   }
 
