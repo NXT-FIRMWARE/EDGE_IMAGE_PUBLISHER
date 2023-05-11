@@ -21,10 +21,13 @@ export class FtpService {
 
   async bootstrap() {
     await this.initFtpClient();
+    setInterval(async () => {
+      await this.filesUploader();
+    }, 1000 * 10);
     //await this.filesUploader();
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  //@Cron(CronExpression.EVERY_10_SECONDS)
   async filesUploader() {
     const yearsPath = this.getDirectories(this.path);
     for (let yearsIndex = 0; yearsIndex < yearsPath.length; yearsIndex++) {
