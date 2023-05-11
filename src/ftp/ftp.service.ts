@@ -15,15 +15,13 @@ export class FtpService {
 
   constructor() {
     this.path = process.env.IMAGES_PATH;
-
     this.ftpClient = new ftp.Client();
-
     this.bootstrap();
   }
 
   async bootstrap() {
     await this.initFtpClient();
-    await this.filesUploader();
+    //await this.filesUploader();
   }
 
   @Cron(CronExpression.EVERY_10_SECONDS)
