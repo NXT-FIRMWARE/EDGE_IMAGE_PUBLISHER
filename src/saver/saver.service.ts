@@ -39,7 +39,7 @@ export class SaverService {
     const minutesPath = date.getMinutes();
     return {
       imageFolderPath: `${yearPath}/${monthPath}/${dayPath}`,
-      imageFilename: `${hourPath}:${minutesPath}`,
+      imageFilename: `${hourPath}-${minutesPath}`,
     };
   }
 
@@ -79,6 +79,13 @@ export class SaverService {
 
   captureImage() {
     this.currentImagePath = this.getCurrentImagePath();
+    console.log(
+      path.join(
+        this.path,
+        this.currentImagePath.imageFolderPath,
+        `${this.currentImagePath.imageFilename}.png`,
+      ),
+    );
     this.camera.capture(
       path.join(
         this.path,
