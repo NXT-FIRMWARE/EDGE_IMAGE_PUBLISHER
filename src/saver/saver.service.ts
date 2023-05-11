@@ -35,12 +35,13 @@ export class SaverService {
     const yearPath = date.getFullYear().toString();
     const monthPath = (date.getMonth() + 1).toString();
     const dayPath = date.getDate().toString();
-    const hourPath = date.getHours();
-    const minutesPath = date.getMinutes();
-    const seconds = date.getSeconds();
+    const hourPath = date.getHours().toString();
+    const minutesPath = date.getMinutes().toString();
+    const seconds = date.getSeconds().toString();
+    this.logger.log(`${yearPath}/${monthPath}/${dayPath}_${hourPath}:${minutesPath}:${seconds}`);
     return {
-      imageFolderPath: `${yearPath}/${monthPath}/${dayPath}`,
-      imageFilename: `${yearPath}/${monthPath}/${dayPath}-${hourPath}-${minutesPath}-${seconds}`,
+      imageFolderPath: `${yearPath}/${monthPath}/${dayPath}/`,
+      imageFilename: `${yearPath}-${monthPath}-${dayPath}_${hourPath}-${minutesPath}-${seconds}`,
     };
   }
 
@@ -80,6 +81,9 @@ export class SaverService {
 
   captureImage() {
     this.currentImagePath = this.getCurrentImagePath();
+    console.log(this.path)
+    console.log(this.currentImagePath.imageFolderPath)
+    console.log(`${this.currentImagePath.imageFilename}.png`)
     console.log(
       path.join(
         this.path,
