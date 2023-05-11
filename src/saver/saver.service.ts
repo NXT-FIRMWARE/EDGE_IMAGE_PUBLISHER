@@ -37,9 +37,10 @@ export class SaverService {
     const dayPath = date.getDate().toString();
     const hourPath = date.getHours();
     const minutesPath = date.getMinutes();
+    const seconds = date.getSeconds();
     return {
       imageFolderPath: `${yearPath}/${monthPath}/${dayPath}`,
-      imageFilename: `${hourPath}-${minutesPath}`,
+      imageFilename: `${yearPath}/${monthPath}/${dayPath} ${hourPath}-${minutesPath}-${seconds}`,
     };
   }
 
