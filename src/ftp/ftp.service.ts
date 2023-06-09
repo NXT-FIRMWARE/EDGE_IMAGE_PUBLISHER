@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import * as ftp from 'basic-ftp';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron, CronExpression , SchedulerRegistry} from '@nestjs/schedule';
 import * as fs from 'fs';
 import * as path from 'path';
+
 @Injectable()
-export class FtpService {
+export class FtpService implements OnModuleInit {
   private ftpClient;
 
   private path;
@@ -13,27 +14,43 @@ export class FtpService {
 
   private logger = new Logger('FTP');
 
-  constructor() {
+  private cron;
+
+  constructor(private readonly scheduleRegistry: SchedulerRegistry) {
+  }
+  
+  onModuleInit() {
     this.path = process.env.IMAGES_PATH;
     this.ftpClient = new ftp.Client();
     this.bootstrap();
   }
-
   async bootstrap() {
     await this.initFtpClient();
-    setInterval(async () => {
-      await this.filesUploader();
-    }, 5000 * 60);
+    this.cron = this.scheduleRegistry.getCronJob('ftp');
+
+    this.cron.start();
+    // setInterval(async () => {
+    //   await this.filesUploader();
+    // }, 5000);
     //await this.filesUploader();
   }
 
-  //@Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_10_SECONDS,{
+    name:"ftp"
+  })
   async filesUploader() {
-    const yearsPath = this.getDirectories(this.path);
+    this.cron.stop();
+    this.logger.log('[d]  upload files to ftp ...')
+    const cameraPath =this.getDirectories(this.path);
+    for (let camerIndex = 0; camerIndex < cameraPath.length; camerIndex++) {
+
+    const yearsPath = this.getDirectories(
+      path.join(this.path,cameraPath[camerIndex])
+    );
     for (let yearsIndex = 0; yearsIndex < yearsPath.length; yearsIndex++) {
       //console.log(yearsPath[i]);
       const monthsPath = this.getDirectories(
-        path.join(this.path, yearsPath[yearsIndex]),
+        path.join(this.path,cameraPath[camerIndex], yearsPath[yearsIndex]),
       );
       for (
         let monthsIndex = 0;
@@ -41,7 +58,7 @@ export class FtpService {
         monthsIndex++
       ) {
         const daysPath = this.getDirectories(
-          path.join(this.path, yearsPath[yearsIndex], monthsPath[monthsIndex]),
+          path.join(this.path,cameraPath[camerIndex], yearsPath[yearsIndex], monthsPath[monthsIndex]),
         );
         //console.log(daysPath);
         for (let daysIndex = 0; daysIndex < daysPath.length; daysIndex++) {
@@ -52,19 +69,22 @@ export class FtpService {
           const files = fs.readdirSync(
             path.join(
               this.path,
+              cameraPath[camerIndex],
               yearsPath[yearsIndex],
               monthsPath[monthsIndex],
               daysPath[daysIndex],
             ),
           );
           console.log(files);
+          await this.ftpClient.ensureDir('/');
           await this.ftpClient.ensureDir(
-            `/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
+            `${cameraPath[camerIndex]}/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
           );
           for (let i = 0; i < files.length; i++) {
             await this.ftpClient.uploadFrom(
               path.join(
                 this.path,
+                cameraPath[camerIndex],
                 yearsPath[yearsIndex],
                 monthsPath[monthsIndex],
                 daysPath[daysIndex],
@@ -75,6 +95,7 @@ export class FtpService {
             fs.unlinkSync(
               path.join(
                 this.path,
+                cameraPath[camerIndex],
                 yearsPath[yearsIndex],
                 monthsPath[monthsIndex],
                 daysPath[daysIndex],
@@ -83,8 +104,9 @@ export class FtpService {
             );
           }
         }
-      }
+      }}
     }
+    this.cron.start();
   }
   async initFtpClient() {
     await this.ftpClient.access({
@@ -93,7 +115,7 @@ export class FtpService {
       password: process.env.FTP_PASSWORD,
       type: 'ftp',
     });
-    console.log(await this.ftpClient.list());
+    //console.log(await this.ftpClient.list());
     //await this.ftpClient.ensureDir("my/remote/directory")
   }
 

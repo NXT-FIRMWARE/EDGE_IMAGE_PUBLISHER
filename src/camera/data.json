@@ -1,6 +1,14 @@
-[{
-    "url":"",
-    "id":"",
-    "name":"",
-    "path":""
-}]
+[
+    {
+        "url": "rtsp://192.168.20.10:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream",
+        "id": "",
+        "camera": "DOME1",
+        "path": "/home/nextronic/"
+    },
+    {
+        "url": "rtsp://192.168.30.11:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream",
+        "id": "",
+        "camera": "DOME2",
+        "path": "/home/nextronic/"
+    }
+]

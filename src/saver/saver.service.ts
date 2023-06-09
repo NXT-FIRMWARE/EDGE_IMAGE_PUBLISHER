@@ -22,7 +22,7 @@ export class SaverService {
     this.currentImagePath = this.getCurrentImagePath();
     this.deltaTime = parseInt(process.env.DELTA_TIME);
 
-    this.bootstrap();
+    //this.bootstrap();
   }
   bootstrap() {
     setInterval(async () => {
