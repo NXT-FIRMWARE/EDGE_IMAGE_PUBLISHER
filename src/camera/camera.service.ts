@@ -66,7 +66,7 @@ export class CameraService {
 
       console.log('typeKB', typeKB ,'sizeValue', sizeValue )
       // stop the record when the sizze is less than 150KB
-      if((typeKB && sizeValue<150)){
+      if(!(typeKB && sizeValue<150)){
         recItem.recorder.captureImage(() => {
          this.logger.log('image saved to ', recItem.recorder.folder)
         });
