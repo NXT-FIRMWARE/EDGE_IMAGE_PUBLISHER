@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
 import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import * as data from './data.json';
+import { exec, execSync } from 'child_process';
 
 
 
@@ -30,7 +31,7 @@ export class CameraService {
     this.path= this.date.getMinutes().toString();
     console.log(`Path: ${this.path}`);
   }
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   initRecorder() {
     console.log('init')
     this.changePath()
@@ -46,7 +47,7 @@ export class CameraService {
         // day : this.date.getMinutes().toString(),
         type: 'image',
       });
-      this.logger.log("rec",rec.folder);
+      // this.logger.log("rec",rec.folder);
       this.recorder.push({
         recorder: rec,
         id: data[i].id,
@@ -54,12 +55,25 @@ export class CameraService {
     }
   }
 
-  @Cron(CronExpression.EVERY_5_SECONDS) 
-  captureProcess() {   
+  @Cron('*/1 * * * *') 
+  captureProcess() {  
     this.recorder.map((recItem) => {
-      recItem.recorder.captureImage(() => {
-        console.log('image saved to ', recItem.recorder.folder)
-      });
+      let  storage = execSync(`df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`).toString();
+      // storage = '55k'
+      console.log(storage)
+      const typeKB = storage.includes('K');
+      const sizeValue = +storage.replace(/[GMK]/gi, '');
+
+      console.log('typeKB', typeKB ,'sizeValue', sizeValue )
+      // stop the record when the sizze is less than 150KB
+      if((typeKB && sizeValue<150)){
+        recItem.recorder.captureImage(() => {
+         this.logger.log('image saved to ', recItem.recorder.folder)
+        });
+      }
+      else{
+        this.logger.log("stop Saving memory ")
+      }
     });
   }
 }

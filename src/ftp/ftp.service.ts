@@ -3,6 +3,7 @@ import * as ftp from 'basic-ftp';
 import { Cron, CronExpression , SchedulerRegistry} from '@nestjs/schedule';
 import * as fs from 'fs';
 import * as path from 'path';
+import { exec, execSync } from 'child_process';
 
 @Injectable()
 export class FtpService implements OnModuleInit {
@@ -15,6 +16,9 @@ export class FtpService implements OnModuleInit {
   private logger = new Logger('FTP');
 
   private cron;
+  private result;
+  private ip;
+  private connectionClosed = false;
 
   constructor(private readonly scheduleRegistry: SchedulerRegistry) {
   }
@@ -28,20 +32,21 @@ export class FtpService implements OnModuleInit {
     await this.initFtpClient();
     this.cron = this.scheduleRegistry.getCronJob('ftp');
 
-    this.cron.start();
+    // this.cron.start();
     // setInterval(async () => {
     //   await this.filesUploader();
     // }, 5000);
     //await this.filesUploader();
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS,{
+  @Cron('*/1 * * * *',{
     name:"ftp"
   })
   async filesUploader() {
     this.cron.stop();
     this.logger.log('[d]  upload files to ftp ...')
     const cameraPath =this.getDirectories(this.path);
+    
     for (let camerIndex = 0; camerIndex < cameraPath.length; camerIndex++) {
 
     const yearsPath = this.getDirectories(
@@ -63,7 +68,7 @@ export class FtpService implements OnModuleInit {
         //console.log(daysPath);
         for (let daysIndex = 0; daysIndex < daysPath.length; daysIndex++) {
           console.log(
-            `/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
+            `${this.path}/${cameraPath[camerIndex]}/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
           );
 
           const files = fs.readdirSync(
@@ -81,6 +86,7 @@ export class FtpService implements OnModuleInit {
             `${cameraPath[camerIndex]}/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
           );
           for (let i = 0; i < files.length; i++) {
+            console.log("uploading")
             await this.ftpClient.uploadFrom(
               path.join(
                 this.path,
@@ -109,12 +115,14 @@ export class FtpService implements OnModuleInit {
     this.cron.start();
   }
   async initFtpClient() {
-    await this.ftpClient.access({
+    this.result = await this.ftpClient.access({
       host: process.env.FTP_HOST,
       user: process.env.FTP_USERNAME,
       password: process.env.FTP_PASSWORD,
       type: 'ftp',
     });
+ 
+    // this.ftpClient.ftp.verbose = true
     //console.log(await this.ftpClient.list());
     //await this.ftpClient.ensureDir("my/remote/directory")
   }
@@ -132,5 +140,29 @@ export class FtpService implements OnModuleInit {
   getDirectories(path) {
     //console.log(path);
     return fs.readdirSync(path);
+  }
+
+// every 2 min
+  @Cron('*/2 * * * *')
+  // @Cron(CronExpression.EVERY_30_SECONDS)
+  async checkConnection(){
+     try {
+      this.ip = execSync(' nmcli device show wlan0 | grep IP4.ADDRESS').toString();
+      console.log("try ip", this.ip)
+      if(this.connectionClosed){
+        console.log('initiating the ftp')
+       await this.initFtpClient().then(()=>{
+        if(this.result.code ===220){
+          console.log('connection closed false')
+          this.connectionClosed = false
+        }
+       })   
+      }
+    } catch (error) {
+      this.ip = null
+      this.connectionClosed = true
+      console.log("catch", this.ip)
+      
+    }
   }
 }
