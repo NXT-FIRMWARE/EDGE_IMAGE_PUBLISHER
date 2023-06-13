@@ -1,14 +1,12 @@
 [
     {
         "url": "rtsp://192.168.20.10:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream",
-        "id": "",
-        "camera": "DOME1",
-        "path": "/home/nextronic/"
+        "id": "1",
+        "camera": "DOME1"
     },
     {
         "url": "rtsp://192.168.30.11:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream",
-        "id": "",
-        "camera": "DOME2",
-        "path": "/home/nextronic/"
+        "id": "2",
+        "camera": "DOME2"
     }
 ]
