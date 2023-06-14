@@ -37,14 +37,56 @@ export class CameraService {
         console.log(`ping not success  to ${camera.ip}`)
       }
     })
-
   }
 
+  async addCamera(ip : string){
+    console.log('newCamera added', ip)
+    const newCamera = await prisma.camera.findUnique({
+      where: {
+        ip : ip
+      }
+    })
+    console.log('newCamera', newCamera)
+    const rec = new Recorder({
+      url: newCamera.url,
+      folder :process.env.IMAGES_PATH,
+      camera : newCamera.cameraName,
+      year: this.date.getFullYear().toString(),
+      month: (this.date.getMonth() + 1).toString(),
+      day: this.date.getDate().toString(),
+      type: 'image',
+    });
+    this.recorder.push({
+      recorder: rec,
+      id: newCamera.ip,
+    })
+  }
+  async update(ip : string){
+    console.log('newCamera added', ip)
+    const newCamera = await prisma.camera.findUnique({
+      where: {
+        ip : ip
+      }
+    })
+    console.log('newCamera', newCamera)
+    const rec = new Recorder({
+      url: newCamera.url,
+      folder :process.env.IMAGES_PATH,
+      camera : newCamera.cameraName,
+      year: this.date.getFullYear().toString(),
+      month: (this.date.getMonth() + 1).toString(),
+      day: this.date.getDate().toString(),
+      type: 'image',
+    });
+    this.recorder.push({
+      recorder: rec,
+      id: newCamera.ip,
+    })
+  }
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async initRecorder() {
     console.log('init Recorder')
-    this.recorder.length=0;
     await  this.connectedCameras()
     for (let i = 0; i < this.connected_Cameras.length; i++) {
       const rec = new Recorder({
@@ -54,7 +96,6 @@ export class CameraService {
         year: this.date.getFullYear().toString(),
         month: (this.date.getMonth() + 1).toString(),
         day: this.date.getDate().toString(),
-        // day : this.date.getMinutes().toString(),
         type: 'image',
       });
       this.recorder.push({
@@ -62,6 +103,7 @@ export class CameraService {
         id: this.connected_Cameras[i].ip,
       })
     }
+    console.log('lenght after ', this.recorder.length)
   }
 
   @Cron('*/1 * * * *') 
@@ -72,7 +114,7 @@ export class CameraService {
       const sizeValue = +storage.replace(/[GMK]/gi, '');
       if(!(typeKB && sizeValue<150)){
         recItem.recorder.captureImage(() => {
-         this.logger.log('image saved to ', recItem.recorder.folder)
+         this.logger.log('image saved to ', recItem.recorder.folder + recItem.recorder.camera)
         });
       }
       else{

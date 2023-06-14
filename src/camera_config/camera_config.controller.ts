@@ -11,7 +11,7 @@ export class CameraConfigController {
   async create(@Body() CameraDto: CameraDto) {
     const addCamera = await this.cameraConfigService.create(CameraDto);
     console.log(addCamera)
-    this.CameraService.initRecorder()
+    this.CameraService.addCamera(CameraDto.ip)
     return addCamera
   }
 
@@ -31,6 +31,7 @@ export class CameraConfigController {
   @Delete(':id')
   async remove(@Param('id') ip: string) {
     const deleteCamera = await  this.cameraConfigService.remove(ip);
+    console.log('deleteCamera', deleteCamera)
     if(deleteCamera === "deleted succesufuly") this.CameraService.initRecorder()
     return deleteCamera
   }

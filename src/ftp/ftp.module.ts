@@ -3,6 +3,6 @@ import { FtpService } from './ftp.service';
 
 
 @Module({
-  providers: [FtpService, ]
+  providers: [FtpService]
 })
 export class FtpModule {}
