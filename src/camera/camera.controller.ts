@@ -2,5 +2,5 @@ import { Controller } from '@nestjs/common';
 
 @Controller('camera')
 export class CameraController {
-    constructor() {}
+  constructor(private readonly cameraController: CameraController) {}
 }

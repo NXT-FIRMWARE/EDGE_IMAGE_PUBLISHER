@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
-// import { SaverModule } from './saver/saver.module';
-import { FtpModule } from './ftp/ftp.module';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CameraModule } from './camera/camera.module';
-import { CameraConfigModule } from './camera_config/camera_config.module';
+import { PosterModule } from './poster/poster.module';
+import { EventsModule } from './events/events.module';
+import { ServerModule } from './server/server.module';
 
 @Module({
   imports: [
-    // SaverModule,
-    FtpModule,
     ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     CameraModule,
-    CameraConfigModule,
+    // PosterModule,
+    EventsModule,
+    // ServerModule,
   ],
   controllers: [],
   providers: [],

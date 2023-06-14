@@ -1,12 +1,6 @@
-
 import { Injectable, Logger } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
-import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
-// import * as data from './data.json';
-import {  execSync } from 'child_process';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
-
+import * as data from './data.json';
 
 interface Recorder {
   recorder: any;
@@ -18,109 +12,39 @@ export class CameraService {
   private recorder: Recorder[] = [];
   public date = new Date();
   private logger = new Logger('CAMERA_SERVICE');
-  private connected_Cameras =[]
-  
-  constructor(private schedulerRegistry: SchedulerRegistry) {
+
+  constructor() {
     this.initRecorder();
   }
- 
-  async connectedCameras(){
-    this.connected_Cameras.length=0
-    const cameras = await prisma.camera.findMany()
-    console.log('cameras', cameras)
-     cameras.map( camera =>{
-      try {
-        execSync(`sudo ping -c 5 ${camera.ip}`).toString();
-        console.log(`ping  success  to ${camera.ip}`)
-        this.connected_Cameras.push(camera);
-      } catch (error) {
-        console.log(`ping not success  to ${camera.ip}`)
-      }
-    })
-  }
 
-  async addCamera(ip : string){
-    console.log('newCamera added', ip)
-    const newCamera = await prisma.camera.findUnique({
-      where: {
-        ip : ip
-      }
-    })
-    console.log('newCamera', newCamera)
-    const rec = new Recorder({
-      url: newCamera.url,
-      folder :process.env.IMAGES_PATH,
-      camera : newCamera.cameraName,
-      year: this.date.getFullYear().toString(),
-      month: (this.date.getMonth() + 1).toString(),
-      day: this.date.getDate().toString(),
-      type: 'image',
-    });
-    this.recorder.push({
-      recorder: rec,
-      id: newCamera.ip,
-    })
-  }
-  async update(ip : string){
-    console.log('newCamera added', ip)
-    const newCamera = await prisma.camera.findUnique({
-      where: {
-        ip : ip
-      }
-    })
-    console.log('newCamera', newCamera)
-    const rec = new Recorder({
-      url: newCamera.url,
-      folder :process.env.IMAGES_PATH,
-      camera : newCamera.cameraName,
-      year: this.date.getFullYear().toString(),
-      month: (this.date.getMonth() + 1).toString(),
-      day: this.date.getDate().toString(),
-      type: 'image',
-    });
-    this.recorder.push({
-      recorder: rec,
-      id: newCamera.ip,
-    })
-  }
-
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  async initRecorder() {
-    console.log('init Recorder')
-    await  this.connectedCameras()
-    for (let i = 0; i < this.connected_Cameras.length; i++) {
+  initRecorder() {
+    console.log('init Recorder');
+    for (let i = 0; i < data.length; i++) {
       const rec = new Recorder({
-        url: this.connected_Cameras[i].url,
-        folder :process.env.IMAGES_PATH,
-        camera : this.connected_Cameras[i].cameraName,
-        year: this.date.getFullYear().toString(),
-        month: (this.date.getMonth() + 1).toString(),
-        day: this.date.getDate().toString(),
+        url: data[i].url,
+        folder: process.env.IMAGES_PATH,
         type: 'image',
       });
       this.recorder.push({
         recorder: rec,
-        id: this.connected_Cameras[i].ip,
-      })
+        id: data[i].ip,
+      });
     }
-    console.log('lenght after ', this.recorder.length)
   }
-
-  @Cron('*/1 * * * *') 
-  captureProcess() {  
+  // onImage(filename) {
+  //   console.log(filename);
+  // }
+  captureProcess() {
     this.recorder.map((recItem) => {
-      const  storage = execSync(`df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`).toString();
-      const typeKB = storage.includes('K');
-      const sizeValue = +storage.replace(/[GMK]/gi, '');
-      if(!(typeKB && sizeValue<150)){
-        recItem.recorder.captureImage(() => {
-         this.logger.log('image saved to ', recItem.recorder.folder + recItem.recorder.camera)
-        });
-      }
-      else{
-        this.logger.log("stop Saving in memory ")
-      }
+      const filename = recItem.recorder.captureImage(() => {
+        this.logger.log('image saved to ', recItem.recorder.folder);
+        this.PostRealTime(new Date());
+      });
+      console.log(filename);
     });
   }
-}
 
+  PostRealTime(date: Date) {
+    console.log(date);
+  }
+}
