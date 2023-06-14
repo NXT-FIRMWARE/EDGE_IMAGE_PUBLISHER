@@ -3,11 +3,11 @@ import { CameraService } from 'src/camera/camera.service';
 
 @Controller('events')
 export class EventsController {
-  constructor(private readonly cameraService: CameraService) {}
+  constructor(private  CameraService :CameraService) {}
 
   @Get()
   Events() {
-    this.cameraService.captureProcess();
+    this.CameraService.captureProcess();
     return 'event Ok';
   }
 }

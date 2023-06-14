@@ -13,7 +13,7 @@ import { ServerModule } from './server/server.module';
     CameraModule,
     // PosterModule,
     EventsModule,
-    // ServerModule,
+    ServerModule,
   ],
   controllers: [],
   providers: [],
