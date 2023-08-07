@@ -52,7 +52,7 @@ export class CameraService {
         this.logger.log('image saved to ', this.recorder[i].recorder.folder);
         console.log('image saved sucefully');
         //this.writeTextonImage(fullPath, Math.random() * 100);
-        if (data[i].uuid !== '') {
+        if (data[i].uuid === '') {
           this.PosteCreateId(fullPath, data[i].cameraName, i);
         }
         this.PostImage(fullPath, data[i].cameraName, i);
