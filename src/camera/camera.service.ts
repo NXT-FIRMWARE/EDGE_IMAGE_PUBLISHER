@@ -44,14 +44,14 @@ export class CameraService {
     }
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async captureProcess() {
     //await this.recorder.map(async (recItem) => {
     for (let i = 0; i < this.recorder.length; i++) {
       await this.recorder[i].recorder.captureImage((fullPath) => {
         this.logger.log('image saved to ', this.recorder[i].recorder.folder);
         console.log('image saved sucefully');
-        this.writeTextonImage(fullPath, Math.random() * 100);
+        //this.writeTextonImage(fullPath, Math.random() * 100);
         if (data[i].uuid !== '') {
           this.PosteCreateId(fullPath, data[i].cameraName, i);
         }
