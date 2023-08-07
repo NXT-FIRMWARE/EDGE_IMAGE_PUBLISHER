@@ -10,7 +10,6 @@ export class PosterService {
   }
 
   postImages() {
-    
 
   }
 }
