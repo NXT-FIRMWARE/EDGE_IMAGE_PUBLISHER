@@ -31,76 +31,76 @@ export class PosterService implements OnModuleInit {
   async filesUploader() {
     this.cameraConfig = this.cameraService.getCamraConfig();
     this.logger.log('[d]  upload files to server ...');
-    try {
-      const cameraPath = this.getDirectories(this.path);
-      for (let camerIndex = 0; camerIndex < cameraPath.length; camerIndex++) {
-        const yearsPath = this.getDirectories(
-          path.join(this.path, cameraPath[camerIndex]),
+    //try {
+    const cameraPath = this.getDirectories(this.path);
+    for (let camerIndex = 0; camerIndex < cameraPath.length; camerIndex++) {
+      const yearsPath = this.getDirectories(
+        path.join(this.path, cameraPath[camerIndex]),
+      );
+      for (let yearsIndex = 0; yearsIndex < yearsPath.length; yearsIndex++) {
+        const monthsPath = this.getDirectories(
+          path.join(this.path, cameraPath[camerIndex], yearsPath[yearsIndex]),
         );
-        for (let yearsIndex = 0; yearsIndex < yearsPath.length; yearsIndex++) {
-          const monthsPath = this.getDirectories(
-            path.join(this.path, cameraPath[camerIndex], yearsPath[yearsIndex]),
+        for (
+          let monthsIndex = 0;
+          monthsIndex < monthsPath.length;
+          monthsIndex++
+        ) {
+          const daysPath = this.getDirectories(
+            path.join(
+              this.path,
+              cameraPath[camerIndex],
+              yearsPath[yearsIndex],
+              monthsPath[monthsIndex],
+            ),
           );
-          for (
-            let monthsIndex = 0;
-            monthsIndex < monthsPath.length;
-            monthsIndex++
-          ) {
-            const daysPath = this.getDirectories(
+          for (let daysIndex = 0; daysIndex < daysPath.length; daysIndex++) {
+            console.log(
+              `${this.path}/${cameraPath[camerIndex]}/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
+            );
+
+            const files = fs.readdirSync(
               path.join(
                 this.path,
                 cameraPath[camerIndex],
                 yearsPath[yearsIndex],
                 monthsPath[monthsIndex],
+                daysPath[daysIndex],
               ),
             );
-            for (let daysIndex = 0; daysIndex < daysPath.length; daysIndex++) {
-              console.log(
-                `${this.path}/${cameraPath[camerIndex]}/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
-              );
-
-              const files = fs.readdirSync(
+            console.log(files);
+            for (let i = 0; i < files.length && files.length > 5; i++) {
+              console.log('uploading');
+              this.PostImage(
+                cameraPath[camerIndex],
                 path.join(
                   this.path,
                   cameraPath[camerIndex],
                   yearsPath[yearsIndex],
                   monthsPath[monthsIndex],
                   daysPath[daysIndex],
+                  files[i],
+                ),
+                camerIndex,
+              );
+              fs.unlinkSync(
+                path.join(
+                  this.path,
+                  cameraPath[camerIndex],
+                  yearsPath[yearsIndex],
+                  monthsPath[monthsIndex],
+                  daysPath[daysIndex],
+                  files[i],
                 ),
               );
-              console.log(files);
-              for (let i = 0; i < files.length && files.length > 5; i++) {
-                console.log('uploading');
-                this.PostImage(
-                  cameraPath[camerIndex],
-                  path.join(
-                    this.path,
-                    cameraPath[camerIndex],
-                    yearsPath[yearsIndex],
-                    monthsPath[monthsIndex],
-                    daysPath[daysIndex],
-                    files[i],
-                  ),
-                  camerIndex,
-                );
-                fs.unlinkSync(
-                  path.join(
-                    this.path,
-                    cameraPath[camerIndex],
-                    yearsPath[yearsIndex],
-                    monthsPath[monthsIndex],
-                    daysPath[daysIndex],
-                    files[i],
-                  ),
-                );
-              }
             }
           }
         }
       }
-    } catch (error) {
-      this.logger.log('error');
     }
+    // } catch (error) {
+    //   this.logger.log('error');
+    // }
   }
 
   getDirectories(path) {

@@ -5,6 +5,7 @@ import { createCanvas, loadImage } from 'canvas';
 import * as FormData from 'form-data';
 import * as fs from 'fs';
 import axios from 'axios';
+import { Cron, CronExpression } from '@nestjs/schedule';
 interface Recorder {
   recorder: any;
   id: string;
@@ -38,6 +39,8 @@ export class CameraService {
       });
     }
   }
+
+  @Cron(CronExpression.EVERY_MINUTE)
   async captureProcess() {
     //await this.recorder.map(async (recItem) => {
     for (let i = 0; i < this.recorder.length; i++) {
