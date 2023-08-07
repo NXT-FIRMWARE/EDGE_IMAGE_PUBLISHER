@@ -11,7 +11,7 @@ import * as FormData from 'form-data';
 export class PosterService implements OnModuleInit {
   private path;
   private ftpFolder;
-  private logger = new Logger('FTP');
+  private logger = new Logger('POSTER');
   private cron;
   private result;
   private ip;
