@@ -11,7 +11,7 @@ import { EventsModule } from './events/events.module';
     ScheduleModule.forRoot(),
     CameraModule,
     EventsModule,
-    // PosterModule,
+    PosterModule,
   ],
   controllers: [],
   providers: [],
