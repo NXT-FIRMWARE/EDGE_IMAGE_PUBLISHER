@@ -7,7 +7,6 @@ export class EventsController {
 
   @Get()
   Events() {
-    this.CameraService.PostRealTime();
     return 'event Ok';
   }
 }

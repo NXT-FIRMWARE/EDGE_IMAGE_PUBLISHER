@@ -52,7 +52,7 @@ export class CameraService {
     cameraName: string,
     indexCamera: number,
   ) {
-    // const filename = 'C:/Users/jbray/Desktop/hello.png';
+    const data = new FormData();
     const image = fs.createReadStream(filename);
     data.append('image', image);
     data.append('time', new Date().toLocaleString());
