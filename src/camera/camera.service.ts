@@ -29,9 +29,13 @@ export class CameraService {
     console.log('init Recorder');
     for (let i = 0; i < data.length; i++) {
       const rec = new Recorder({
-        url: data[i].url,
+        camera: data[i].cameraName,
         folder: process.env.IMAGES_PATH,
+        year: this.date.getFullYear().toString(),
+        month: (this.date.getMonth() + 1).toString(),
+        day: this.date.getDate().toString(),
         type: 'image',
+        url: data[i].url,
       });
       this.recorder.push({
         recorder: rec,
