@@ -90,6 +90,7 @@ export class CameraService {
     formData.append('time', new Date().toLocaleString());
     formData.append('location', process.env.LOCATION);
     formData.append('cameraName', cameraName);
+    console.log('data form created');
     await axios
       .post(`${process.env.SERVER}/camera`, formData, {
         headers: {
