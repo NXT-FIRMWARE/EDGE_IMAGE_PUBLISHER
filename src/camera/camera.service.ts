@@ -83,7 +83,7 @@ export class CameraService {
     formData.append('location', process.env.LOCATION);
     formData.append('cameraName', cameraName);
     await axios
-      .post('http://192.168.1.29:3001/server', formData, {
+      .post(`${process.env.SERVER}/camera`, formData, {
         headers: {
           accept: 'application/json',
           'Accept-Language': 'en-US,en;q=0.8',
@@ -112,19 +112,25 @@ export class CameraService {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     const data = new FormData();
     const image = fs.createReadStream(filename);
-    data.append('image', image);
-    data.append('id', data[cameraIndex].uuid);
+    data.append('images', image);
+    // data.append('id', data[cameraIndex].uuid);
+    data.append('status', false);
+
     data.append('time', new Date().toLocaleString());
     data.append('location', process.env.LOCATION);
-    data.append('cameraName', cameraName);
+    data.append('name', cameraName);
     await axios
-      .post('http://192.168.1.29:3001/server', data, {
-        headers: {
-          accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8',
-          'Content-Type': 'multipart/form-data',
+      .post(
+        `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+        data,
+        {
+          headers: {
+            accept: 'application/json',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Content-Type': 'multipart/form-data',
+          },
         },
-      })
+      )
       .then((response) => {
         //handle success
         console.log(response.data);

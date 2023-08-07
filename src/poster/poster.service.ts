@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 import axios from 'axios';
-import { CameraService} from 'src/camera/camera.service';
+import { CameraService } from 'src/camera/camera.service';
 import * as FormData from 'form-data';
 
 @Injectable()
@@ -80,7 +80,8 @@ export class PosterService implements OnModuleInit {
                     monthsPath[monthsIndex],
                     daysPath[daysIndex],
                     files[i],
-                  ),camerIndex
+                  ),
+                  camerIndex,
                 );
                 fs.unlinkSync(
                   path.join(
@@ -110,19 +111,26 @@ export class PosterService implements OnModuleInit {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     const data = new FormData();
     const image = fs.createReadStream(fullPath);
-    data.append('image', image);
+    data.append('images', image);
     data.append('id', this.cameraConfig[cameraIndex].uuid);
-    data.append('time', new Date().toLocaleString());
+    //data.append('time', new Date().toLocaleString());
+    data.append('status', true);
     data.append('location', process.env.LOCATION);
-    data.append('cameraName', cameraName);
+    data.append('name', cameraName);
     await axios
-      .post('http://192.168.1.29:3001/server', data, {
-        headers: {
-          accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8',
-          'Content-Type': 'multipart/form-data',
+      .post(
+        `${process.env.SERVER}/camera/${
+          this.cameraService.getCamraConfig()[cameraIndex].uuid
+        }/image`,
+        data,
+        {
+          headers: {
+            accept: 'application/json',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Content-Type': 'multipart/form-data',
+          },
         },
-      })
+      )
       .then((response) => {
         //handle success
         console.log(response.data);
