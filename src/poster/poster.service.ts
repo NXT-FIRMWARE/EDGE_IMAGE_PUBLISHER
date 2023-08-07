@@ -117,6 +117,11 @@ export class PosterService implements OnModuleInit {
     data.append('status', true);
     data.append('location', process.env.LOCATION);
     data.append('name', cameraName);
+    console.log(
+      `push to .... ${process.env.SERVER}/camera/${
+        this.cameraService.getCamraConfig()[cameraIndex].uuid
+      }/image`,
+    );
     await axios
       .post(
         `${process.env.SERVER}/camera/${
