@@ -85,8 +85,8 @@ export class CameraService {
   ) {
     console.log('post this image ', fullPath);
     const formData = new FormData();
-    const image = fs.createReadStream(fullPath);
-    formData.append('image', image);
+    const image = await fs.createReadStream(fullPath);
+    //formData.append('image', image);
     formData.append('time', new Date().toLocaleString());
     formData.append('location', process.env.LOCATION);
     formData.append('cameraName', cameraName);
@@ -123,8 +123,6 @@ export class CameraService {
     const image = fs.createReadStream(filename);
     data.append('images', image);
     // data.append('id', data[cameraIndex].uuid);
-    data.append('status', false);
-
     data.append('time', new Date().toLocaleString());
     data.append('location', process.env.LOCATION);
     data.append('name', cameraName);
