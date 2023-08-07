@@ -5,6 +5,8 @@ import * as path from 'path';
 import { execSync } from 'child_process';
 import axios from 'axios';
 import { CameraService} from 'src/camera/camera.service';
+import * as FormData from 'form-data';
+
 @Injectable()
 export class PosterService implements OnModuleInit {
   private path;
