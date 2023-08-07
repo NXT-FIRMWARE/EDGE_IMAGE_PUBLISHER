@@ -83,6 +83,7 @@ export class CameraService {
     cameraName: string,
     indexCamera: number,
   ) {
+    console.log('post this image ', fullPath);
     const formData = new FormData();
     const image = fs.createReadStream(fullPath);
     formData.append('image', image);
