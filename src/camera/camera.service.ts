@@ -21,7 +21,7 @@ export class CameraService {
   private tx = 80;
   private ty = 80;
   constructor() {
-    // this.initRecorder();
+    this.initRecorder();
   }
 
   initRecorder() {
