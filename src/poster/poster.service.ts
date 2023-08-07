@@ -30,7 +30,7 @@ export class PosterService implements OnModuleInit {
   @Cron('* * * * *')
   async filesUploader() {
     this.cameraConfig = this.cameraService.getCamraConfig();
-    this.logger.log('[d]  upload files to ftp ...');
+    this.logger.log('[d]  upload files to server ...');
     try {
       const cameraPath = this.getDirectories(this.path);
       for (let camerIndex = 0; camerIndex < cameraPath.length; camerIndex++) {
