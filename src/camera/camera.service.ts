@@ -86,7 +86,7 @@ export class CameraService {
     console.log('post this image ', fullPath);
     const formData = new FormData();
     const image = await fs.createReadStream(fullPath);
-    //formData.append('image', image);
+    formData.append('image', image);
     formData.append('time', new Date().toLocaleString());
     formData.append('location', process.env.LOCATION);
     formData.append('cameraName', cameraName);
