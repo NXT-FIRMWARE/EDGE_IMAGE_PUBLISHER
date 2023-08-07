@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
 import * as data from './data.json';
+import { createCanvas, loadImage } from 'canvas';
 import * as FormData from 'form-data';
 import * as fs from 'fs';
 import axios from 'axios';
@@ -15,7 +16,9 @@ export class CameraService {
   public date = new Date();
   private logger = new Logger('CAMERA_SERVICE');
   private path = '';
-  private CameraConfig: any[]
+  private CameraConfig: any[];
+  private tx = 80;
+  private ty = 80;
   constructor() {
     // this.initRecorder();
   }
@@ -41,14 +44,33 @@ export class CameraService {
       await this.recorder[i].recorder.captureImage((fullPath) => {
         this.logger.log('image saved to ', this.recorder[i].recorder.folder);
         console.log('image saved sucefully');
+        this.writeTextonImage(fullPath, Math.random() * 100);
         if (data[i].uuid !== '') {
           this.PosteCreateId(fullPath, data[i].cameraName, i);
         }
-        this.PostImage(fullPath, data[i].cameraName,i);
+        this.PostImage(fullPath, data[i].cameraName, i);
       });
     }
   }
 
+  writeTextonImage(fullPath: string, number) {
+    loadImage(fullPath).then((img) => {
+      const canvas = createCanvas(img.width, img.height),
+        ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      ctx.lineWidth = 2;
+      ctx.fillText(
+        `Environment SENSOR VALUE : ${number}
+      `,
+        this.tx,
+        this.ty,
+      );
+      const out = fs.createWriteStream(fullPath),
+        stream = canvas.createPNGStream();
+      stream.pipe(out);
+      out.on('finish', () => console.log('Done'));
+    });
+  }
   async PosteCreateId(
     fullPath: string,
     cameraName: string,
