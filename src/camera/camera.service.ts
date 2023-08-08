@@ -142,8 +142,8 @@ export class CameraService {
     this.logger.log(
       `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
     );
-    const result = await axios
-      .post(
+    try {
+      const result = await axios.post(
         `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
         formData,
         {
@@ -153,19 +153,13 @@ export class CameraService {
             'Content-Type': 'multipart/form-data',
           },
         },
-      )
-      .then((response) => {
-        //handle success
-        console.log(response.data);
-        //delete image
-        this.deleteImage(fullPath);
-        //To  DO remove image from folder
-      })
-      .catch((error) => {
-        //handle error
-        console.log(`${error}`);
-      });
-    this.logger.log(result);
+      );
+      this.logger.log(result);
+      //delete image
+      this.deleteImage(fullPath);
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   async getCamraConfig() {
