@@ -2,7 +2,6 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
 import axios from 'axios';
 import { CameraService } from 'src/camera/camera.service';
 import * as FormData from 'form-data';
@@ -114,7 +113,8 @@ export class PosterService implements OnModuleInit {
     data.append('image', image);
     console.log('camera config');
     console.log(this.cameraConfig);
-    console.log(this.cameraConfig[cameraIndex]);
+    console.log(this.cameraConfig[0]);
+    console.log(cameraIndex);
     data.append('id', this.cameraConfig[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
     data.append('status', 'success');
