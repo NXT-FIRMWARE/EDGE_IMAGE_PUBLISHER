@@ -112,7 +112,7 @@ export class CameraService {
         //load id camera
         this.CameraConfig[indexCamera].uuid = response.data._id;
         fs.writeFileSync(
-          `${__dirname}/data.json`,
+          `${__dirname}/src/camera/data.json`,
           JSON.stringify(this.CameraConfig),
         );
         //delete image
