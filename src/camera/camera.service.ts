@@ -139,6 +139,9 @@ export class CameraService {
     data.append('status', 'success');
     data.append('location', process.env.LOCATION);
     data.append('name', cameraName);
+    this.logger.log(
+      `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+    );
     await axios
       .post(
         `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
