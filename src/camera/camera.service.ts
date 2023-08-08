@@ -50,20 +50,24 @@ export class CameraService {
     for (let i = 0; i < this.recorder.length; i++) {
       await this.recorder[i].recorder.captureImage(async (fullPath) => {
         console.log('image saved sucefully');
-        //await this.writeTextonImage(fullPath, (Math.random() * 100).toFixed(1));
-        if (data[i].uuid === '') {
-          this.logger.log('call create with this image');
-          await this.PosteCreateId(fullPath, data[i].cameraName, i);
-        } else {
-          this.logger.log('call post with this image');
-          await this.PostImage(fullPath, data[i].cameraName, i);
-        }
+        await this.writeTextonImage(
+          fullPath,
+          (Math.random() * 100).toFixed(1),
+          i,
+        );
+        // if (data[i].uuid === '') {
+        //   this.logger.log('call create with this image');
+        //   await this.PosteCreateId(fullPath, data[i].cameraName, i);
+        // } else {
+        //   this.logger.log('call post with this image');
+        //   await this.PostImage(fullPath, data[i].cameraName, i);
+        // }
       });
     }
   }
 
-  async writeTextonImage(fullPath: string, number) {
-    await loadImage(fullPath).then((img) => {
+  async writeTextonImage(fullPath: string, number, index: number) {
+    await loadImage(fullPath).then(async (img) => {
       const canvas = createCanvas(img.width, img.height),
         ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
@@ -75,10 +79,19 @@ export class CameraService {
         this.tx,
         this.ty,
       );
-      const out = fs.createWriteStream(fullPath),
+      const out = await fs.createWriteStream(fullPath),
         stream = canvas.createPNGStream();
       stream.pipe(out);
-      out.on('finish', () => console.log('Done'));
+      out.on('finish', () => {
+        console.log('test');
+        if (data[index].uuid === '') {
+          this.logger.log('call create with this image');
+          this.PosteCreateId(fullPath, data[index].cameraName, index);
+        } else {
+          this.logger.log('call post with this image');
+          this.PostImage(fullPath, data[index].cameraName, index);
+        }
+      });
     });
   }
   async PosteCreateId(
