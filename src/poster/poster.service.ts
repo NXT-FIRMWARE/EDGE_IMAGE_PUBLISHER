@@ -109,13 +109,12 @@ export class PosterService implements OnModuleInit {
   async PostImage(cameraName: string, fullPath: string, cameraIndex) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     const data = new FormData();
-    const image = fs.createReadStream(fullPath);
-    data.append('image', image);
+    const image = await fs.createReadStream(fullPath);
+    data.append('images', image);
     console.log('camera config');
     console.log(this.cameraConfig);
     console.log(this.cameraConfig[0]);
     console.log(cameraIndex);
-    data.append('id', this.cameraConfig[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
     data.append('status', 'success');
     data.append('location', process.env.LOCATION);
