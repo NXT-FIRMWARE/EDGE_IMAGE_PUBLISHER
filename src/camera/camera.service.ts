@@ -25,7 +25,6 @@ export class CameraService implements OnModuleInit {
   onModuleInit() {
     this.host = process.env.SERVER;
     this.initRecorder();
-    throw new Error('Method not implemented.');
   }
 
   initRecorder() {
