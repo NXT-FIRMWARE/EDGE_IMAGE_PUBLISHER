@@ -164,7 +164,7 @@ export class CameraService {
       });
   }
 
-  getCamraConfig() {
+  async getCamraConfig() {
     return this.CameraConfig;
   }
 }
