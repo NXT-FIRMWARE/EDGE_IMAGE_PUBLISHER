@@ -111,6 +111,7 @@ export class CameraService {
         console.log(response.data);
         //load id camera
         this.CameraConfig[indexCamera].uuid = response.data._id;
+        this.logger.log(`${__dirname}/src/camera/data.json`);
         fs.writeFileSync(
           `${__dirname}/src/camera/data.json`,
           JSON.stringify(this.CameraConfig),
