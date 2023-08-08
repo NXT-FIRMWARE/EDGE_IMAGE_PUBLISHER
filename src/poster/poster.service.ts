@@ -110,7 +110,7 @@ export class PosterService implements OnModuleInit {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     const data = new FormData();
     const image = await fs.createReadStream(fullPath);
-    data.append('images', image);
+    data.append('images', image || '');
     console.log('camera config');
     console.log(this.cameraConfig);
     console.log(this.cameraConfig[0]);

@@ -144,8 +144,8 @@ export class CameraService {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     console.log(cameraName);
     const formDataRequest = new FormData();
-    // const image = await fs.createReadStream(fullPath);
-    // formDataRequest.append('images', image);
+    const image = await fs.createReadStream(fullPath);
+    formDataRequest.append('images', image || '');
     // data.append('id', data[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
     formDataRequest.append('status', 'success');
