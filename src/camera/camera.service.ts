@@ -142,6 +142,7 @@ export class CameraService {
   }
   async PostImage(fullPath: string, cameraName: string, cameraIndex: number) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
+    console.log(cameraName);
     const formData = new FormData();
     const image = fs.createReadStream(fullPath);
     formData.append('images', image);
