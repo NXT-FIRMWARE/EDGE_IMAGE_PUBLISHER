@@ -49,16 +49,13 @@ export class CameraService {
     //await this.recorder.map(async (recItem) => {
     for (let i = 0; i < this.recorder.length; i++) {
       await this.recorder[i].recorder.captureImage(async (fullPath) => {
-        this.logger.log('image saved to ', this.recorder[i].recorder.folder);
         console.log('image saved sucefully');
         await this.writeTextonImage(fullPath, (Math.random() * 100).toFixed(1));
         if (data[i].uuid === '') {
           this.logger.log('call create with this image');
-          this.logger.log(fullPath);
           await this.PosteCreateId(fullPath, data[i].cameraName, i);
         } else {
           this.logger.log('call post with this image');
-          this.logger.log(fullPath);
           await this.PostImage(fullPath, data[i].cameraName, i);
         }
       });
@@ -89,7 +86,6 @@ export class CameraService {
     cameraName: string,
     indexCamera: number,
   ) {
-    console.log('post create camera using this image ', fullPath);
     const formData = new FormData();
     const image = await fs.createReadStream(fullPath);
     formData.append('images', image);
@@ -97,7 +93,6 @@ export class CameraService {
     formData.append('status', 'success');
     formData.append('location', process.env.LOCATION);
     formData.append('name', cameraName);
-    console.log(`${process.env.SERVER}/camera`);
     await axios
       .post(`${process.env.SERVER}/camera`, formData, {
         headers: {
@@ -112,7 +107,6 @@ export class CameraService {
         this.logger.log(response.data);
         //load id camera
         this.CameraConfig[indexCamera].uuid = response.data._id;
-        this.logger.log(`${__dirname}/src/camera/data.json`);
         fs.writeFileSync(
           `${__dirname}/src/camera/data.json`,
           JSON.stringify(this.CameraConfig),
@@ -122,7 +116,7 @@ export class CameraService {
       })
       .catch((error) => {
         //handle error
-        console.log(`${error}`);
+        this.logger.error(`${error}`);
       });
   }
 
@@ -139,6 +133,7 @@ export class CameraService {
     formData.append('status', 'success');
     formData.append('location', process.env.LOCATION);
     formData.append('name', cameraName);
+    this.logger.log(formData);
     this.logger.log(
       `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
     );
