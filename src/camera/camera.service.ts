@@ -84,12 +84,16 @@ export class CameraService {
       stream.pipe(out);
       out.on('finish', () => {
         console.log('test');
-        if (data[index].uuid === '') {
+        if (this.CameraConfig[index].uuid === '') {
           this.logger.log('call create with this image');
-          this.PosteCreateId(fullPath, data[index].cameraName, index);
+          this.PosteCreateId(
+            fullPath,
+            this.CameraConfig[index].cameraName,
+            index,
+          );
         } else {
           this.logger.log('call post with this image');
-          this.PostImage(fullPath, data[index].cameraName, index);
+          this.PostImage(fullPath, this.CameraConfig[index].cameraName, index);
         }
       });
     });
