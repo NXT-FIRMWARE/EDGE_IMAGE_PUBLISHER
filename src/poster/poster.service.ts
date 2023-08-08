@@ -112,6 +112,7 @@ export class PosterService implements OnModuleInit {
     const data = new FormData();
     const image = fs.createReadStream(fullPath);
     data.append('images', image);
+    console.log(this.cameraConfig[cameraIndex]);
     data.append('id', this.cameraConfig[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
     data.append('status', true);
