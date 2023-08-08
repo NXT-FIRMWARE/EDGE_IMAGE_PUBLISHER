@@ -143,21 +143,22 @@ export class CameraService {
   async PostImage(fullPath: string, cameraName: string, cameraIndex: number) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     console.log(cameraName);
-    const formData = new FormData();
+    const formDataRequest = new FormData();
     const image = fs.createReadStream(fullPath);
-    formData.append('images', image);
+    formDataRequest.append('images', image);
     // data.append('id', data[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
-    formData.append('status', 'success');
-    formData.append('location', process.env.LOCATION);
-    formData.append('name', cameraName);
+    formDataRequest.append('status', 'success');
+    formDataRequest.append('location', process.env.LOCATION);
+    formDataRequest.append('name', cameraName);
     this.logger.log(
       `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
     );
     try {
+      console.log('post image ....');
       const result = await axios.post(
         `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
-        formData,
+        formDataRequest,
         {
           headers: {
             accept: 'application/json',
