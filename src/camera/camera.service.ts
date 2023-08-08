@@ -50,7 +50,7 @@ export class CameraService {
     for (let i = 0; i < this.recorder.length; i++) {
       await this.recorder[i].recorder.captureImage(async (fullPath) => {
         console.log('image saved sucefully');
-        await this.writeTextonImage(fullPath, (Math.random() * 100).toFixed(1));
+        //await this.writeTextonImage(fullPath, (Math.random() * 100).toFixed(1));
         if (data[i].uuid === '') {
           this.logger.log('call create with this image');
           await this.PosteCreateId(fullPath, data[i].cameraName, i);
@@ -138,7 +138,7 @@ export class CameraService {
     );
     try {
       const result = await axios.post(
-        `http://41.141.149.117:3000/camera/64d20e31c0952a217c5b88a3/image`,
+        `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
         formData,
         {
           headers: {
