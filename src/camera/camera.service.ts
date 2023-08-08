@@ -148,9 +148,9 @@ export class CameraService {
     formDataRequest.append('images', image || '');
     // data.append('id', data[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
-    formDataRequest.append('status', 'success');
-    formDataRequest.append('location', process.env.LOCATION);
-    formDataRequest.append('name', cameraName);
+    formDataRequest.append('status', 'success' || '');
+    formDataRequest.append('location', process.env.LOCATION || '');
+    formDataRequest.append('name', cameraName || '');
     this.logger.log(
       `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
     );

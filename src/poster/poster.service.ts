@@ -112,13 +112,11 @@ export class PosterService implements OnModuleInit {
     const image = await fs.createReadStream(fullPath);
     data.append('images', image || '');
     console.log('camera config');
-    console.log(this.cameraConfig);
-    console.log(this.cameraConfig[0]);
     console.log(cameraIndex);
     //data.append('time', new Date().toLocaleString());
     data.append('status', 'success');
-    data.append('location', process.env.LOCATION);
-    data.append('name', cameraName);
+    data.append('location', process.env.LOCATION || '');
+    data.append('name', cameraName || '');
     console.log(
       `push to .... ${process.env.SERVER}/camera/${this.cameraConfig[cameraIndex].uuid}/image`,
     );
