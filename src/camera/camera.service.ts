@@ -20,7 +20,9 @@ export class CameraService {
   private CameraConfig: any[];
   private tx = 80;
   private ty = 80;
+  private host;
   constructor() {
+    this.host = process.env.SERVER;
     this.initRecorder();
   }
 
@@ -111,7 +113,7 @@ export class CameraService {
     formData.append('location', process.env.LOCATION);
     formData.append('name', cameraName);
     await axios
-      .post(`${process.env.SERVER}/camera`, formData, {
+      .post(`${this.host}/camera`, formData, {
         headers: {
           accept: 'application/json',
           'Accept-Language': 'en-US,en;q=0.8',
@@ -152,12 +154,12 @@ export class CameraService {
     formDataRequest.append('location', process.env.LOCATION || '');
     formDataRequest.append('name', cameraName || '');
     this.logger.log(
-      `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+      `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
     );
     try {
       console.log('post image ....');
       const result = await axios.post(
-        `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+        `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
         formDataRequest,
         {
           headers: {
