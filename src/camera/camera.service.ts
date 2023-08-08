@@ -53,9 +53,14 @@ export class CameraService {
         console.log('image saved sucefully');
         //this.writeTextonImage(fullPath, Math.random() * 100);
         if (data[i].uuid === '') {
+          this.logger.log('call create with this image');
+          this.logger.log(fullPath);
           this.PosteCreateId(fullPath, data[i].cameraName, i);
+        } else {
+          this.logger.log('call create with this image');
+          this.logger.log(fullPath);
+          this.PostImage(fullPath, data[i].cameraName, i);
         }
-        this.PostImage(fullPath, data[i].cameraName, i);
       });
     }
   }
