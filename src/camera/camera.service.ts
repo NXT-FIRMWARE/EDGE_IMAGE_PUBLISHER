@@ -105,7 +105,7 @@ export class CameraService {
         console.log('response from server :');
         console.log(response.data);
         //load id camera
-        this.CameraConfig[indexCamera].uuid = response.data.id;
+        this.CameraConfig[indexCamera].uuid = response.data._id;
         fs.writeFileSync('data.json', JSON.stringify(this.CameraConfig));
         //delete image
         this.deleteImage(fullPath);
@@ -126,6 +126,7 @@ export class CameraService {
     data.append('images', image);
     // data.append('id', data[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
+    data.append('status', 'success');
     data.append('location', process.env.LOCATION);
     data.append('name', cameraName);
     await axios
