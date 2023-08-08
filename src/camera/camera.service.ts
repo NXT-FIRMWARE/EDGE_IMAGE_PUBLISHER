@@ -142,7 +142,7 @@ export class CameraService {
     this.logger.log(
       `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
     );
-    await axios
+    const result = await axios
       .post(
         `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
         formData,
@@ -165,6 +165,7 @@ export class CameraService {
         //handle error
         console.log(`${error}`);
       });
+    this.logger.log(result);
   }
 
   async getCamraConfig() {
