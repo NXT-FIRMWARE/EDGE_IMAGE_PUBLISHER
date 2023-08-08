@@ -86,8 +86,9 @@ export class CameraService {
     console.log('post create camera using this image ', fullPath);
     const formData = new FormData();
     const image = await fs.createReadStream(fullPath);
-    formData.append('image', image);
+    formData.append('images', image);
     //formData.append('time', new Date().toLocaleString());
+    formData.append('status', 'success');
     formData.append('location', process.env.LOCATION);
     formData.append('name', cameraName);
     console.log(`${process.env.SERVER}/camera`);
@@ -124,7 +125,7 @@ export class CameraService {
     const image = fs.createReadStream(filename);
     data.append('images', image);
     // data.append('id', data[cameraIndex].uuid);
-    data.append('time', new Date().toLocaleString());
+    //data.append('time', new Date().toLocaleString());
     data.append('location', process.env.LOCATION);
     data.append('name', cameraName);
     await axios
