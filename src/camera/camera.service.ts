@@ -71,7 +71,7 @@ export class CameraService {
         ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
       ctx.lineWidth = 2;
-      ctx.font = '40pt';
+      ctx.font = '40px';
       ctx.fillText(
         `Environment SENSOR VALUE : ${number}
       `,
