@@ -115,7 +115,7 @@ export class PosterService implements OnModuleInit {
     console.log(this.cameraConfig[cameraIndex]);
     data.append('id', this.cameraConfig[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
-    data.append('status', true);
+    data.append('status', 'success');
     data.append('location', process.env.LOCATION);
     data.append('name', cameraName);
     console.log(
