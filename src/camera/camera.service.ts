@@ -48,25 +48,25 @@ export class CameraService {
   async captureProcess() {
     //await this.recorder.map(async (recItem) => {
     for (let i = 0; i < this.recorder.length; i++) {
-      await this.recorder[i].recorder.captureImage((fullPath) => {
+      await this.recorder[i].recorder.captureImage(async (fullPath) => {
         this.logger.log('image saved to ', this.recorder[i].recorder.folder);
         console.log('image saved sucefully');
-        this.writeTextonImage(fullPath, Math.random() * 100);
+        await this.writeTextonImage(fullPath, Math.random() * 100);
         if (data[i].uuid === '') {
           this.logger.log('call create with this image');
           this.logger.log(fullPath);
-          this.PosteCreateId(fullPath, data[i].cameraName, i);
+          await this.PosteCreateId(fullPath, data[i].cameraName, i);
         } else {
           this.logger.log('call post with this image');
           this.logger.log(fullPath);
-          this.PostImage(fullPath, data[i].cameraName, i);
+          await this.PostImage(fullPath, data[i].cameraName, i);
         }
       });
     }
   }
 
-  writeTextonImage(fullPath: string, number) {
-    loadImage(fullPath).then((img) => {
+  async writeTextonImage(fullPath: string, number) {
+    await loadImage(fullPath).then((img) => {
       const canvas = createCanvas(img.width, img.height),
         ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
@@ -107,8 +107,8 @@ export class CameraService {
       })
       .then((response) => {
         //handle success
-        console.log('response from server :');
-        console.log(response.data);
+        this.logger.log('response from server :');
+        this.logger.log(response.data);
         //load id camera
         this.CameraConfig[indexCamera].uuid = response.data._id;
         this.logger.log(`${__dirname}/src/camera/data.json`);
