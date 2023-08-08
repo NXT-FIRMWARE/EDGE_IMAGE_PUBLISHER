@@ -51,7 +51,7 @@ export class CameraService {
       await this.recorder[i].recorder.captureImage(async (fullPath) => {
         this.logger.log('image saved to ', this.recorder[i].recorder.folder);
         console.log('image saved sucefully');
-        await this.writeTextonImage(fullPath, Math.random() * 100);
+        await this.writeTextonImage(fullPath, (Math.random() * 100).toFixed(1));
         if (data[i].uuid === '') {
           this.logger.log('call create with this image');
           this.logger.log(fullPath);
