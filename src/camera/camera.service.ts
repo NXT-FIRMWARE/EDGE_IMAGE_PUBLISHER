@@ -83,7 +83,7 @@ export class CameraService {
         stream = canvas.createPNGStream();
       stream.pipe(out);
       out.on('finish', () => {
-        console.log('test');
+        console.log(this.CameraConfig[index]);
         if (this.CameraConfig[index].uuid === '') {
           this.logger.log('call create with this image');
           this.PosteCreateId(
