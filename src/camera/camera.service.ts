@@ -51,7 +51,7 @@ export class CameraService {
       await this.recorder[i].recorder.captureImage((fullPath) => {
         this.logger.log('image saved to ', this.recorder[i].recorder.folder);
         console.log('image saved sucefully');
-        //this.writeTextonImage(fullPath, Math.random() * 100);
+        this.writeTextonImage(fullPath, Math.random() * 100);
         if (data[i].uuid === '') {
           this.logger.log('call create with this image');
           this.logger.log(fullPath);
@@ -111,7 +111,10 @@ export class CameraService {
         console.log(response.data);
         //load id camera
         this.CameraConfig[indexCamera].uuid = response.data._id;
-        fs.writeFileSync('data.json', JSON.stringify(this.CameraConfig));
+        fs.writeFileSync(
+          `${__dirname}/data.json`,
+          JSON.stringify(this.CameraConfig),
+        );
         //delete image
         this.deleteImage(fullPath);
       })
