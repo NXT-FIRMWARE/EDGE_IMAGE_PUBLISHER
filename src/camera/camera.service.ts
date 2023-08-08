@@ -133,13 +133,12 @@ export class CameraService {
     formData.append('status', 'success');
     formData.append('location', process.env.LOCATION);
     formData.append('name', cameraName);
-    this.logger.log(formData);
     this.logger.log(
       `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
     );
     try {
       const result = await axios.post(
-        `${process.env.SERVER}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+        `http://41.141.149.117:3000/camera/64d20e31c0952a217c5b88a3/image`,
         formData,
         {
           headers: {
