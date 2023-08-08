@@ -57,7 +57,7 @@ export class CameraService {
           this.logger.log(fullPath);
           this.PosteCreateId(fullPath, data[i].cameraName, i);
         } else {
-          this.logger.log('call create with this image');
+          this.logger.log('call post with this image');
           this.logger.log(fullPath);
           this.PostImage(fullPath, data[i].cameraName, i);
         }
@@ -124,10 +124,10 @@ export class CameraService {
   async deleteImage(path: string) {
     return fs.unlinkSync(path);
   }
-  async PostImage(filename: string, cameraName: string, cameraIndex: number) {
+  async PostImage(fullPath: string, cameraName: string, cameraIndex: number) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     const data = new FormData();
-    const image = fs.createReadStream(filename);
+    const image = fs.createReadStream(fullPath);
     data.append('images', image);
     // data.append('id', data[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
@@ -150,7 +150,7 @@ export class CameraService {
         //handle success
         console.log(response.data);
         //delete image
-        this.deleteImage(`${process.env.IMAGE_PATH}/${filename}`);
+        this.deleteImage(fullPath);
         //To  DO remove image from folder
       })
       .catch((error) => {
