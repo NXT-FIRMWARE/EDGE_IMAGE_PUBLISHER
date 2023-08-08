@@ -83,13 +83,13 @@ export class CameraService {
     cameraName: string,
     indexCamera: number,
   ) {
-    console.log('post this image ', fullPath);
+    console.log('post create camera using this image ', fullPath);
     const formData = new FormData();
     const image = await fs.createReadStream(fullPath);
     formData.append('image', image);
-    formData.append('time', new Date().toLocaleString());
+    //formData.append('time', new Date().toLocaleString());
     formData.append('location', process.env.LOCATION);
-    formData.append('cameraName', cameraName);
+    formData.append('name', cameraName);
     console.log(`${process.env.SERVER}/camera`);
     await axios
       .post(`${process.env.SERVER}/camera`, formData, {
@@ -101,6 +101,7 @@ export class CameraService {
       })
       .then((response) => {
         //handle success
+        console.log('response from server :');
         console.log(response.data);
         //load id camera
         this.CameraConfig[indexCamera].uuid = response.data.id;

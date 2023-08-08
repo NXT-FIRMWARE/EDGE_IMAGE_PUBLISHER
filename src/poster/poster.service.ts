@@ -27,7 +27,7 @@ export class PosterService implements OnModuleInit {
     this.path = process.env.IMAGES_PATH;
   }
 
-  @Cron('* * * * *')
+  //@Cron('* * * * *')
   async filesUploader() {
     this.cameraConfig = this.cameraService.getCamraConfig();
     this.logger.log('[d]  upload files to server ...');
@@ -111,7 +111,7 @@ export class PosterService implements OnModuleInit {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     const data = new FormData();
     const image = fs.createReadStream(fullPath);
-    data.append('images', image);
+    data.append('image', image);
     console.log(this.cameraConfig[cameraIndex]);
     data.append('id', this.cameraConfig[cameraIndex].uuid);
     //data.append('time', new Date().toLocaleString());
