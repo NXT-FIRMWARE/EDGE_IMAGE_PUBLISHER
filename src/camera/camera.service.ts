@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
 import * as data from './data.json';
 import { createCanvas, loadImage } from 'canvas';
@@ -12,7 +12,7 @@ interface Recorder {
 }
 
 @Injectable()
-export class CameraService {
+export class CameraService implements OnModuleInit {
   private recorder: Recorder[] = [];
   public date = new Date();
   private logger = new Logger('CAMERA_SERVICE');
@@ -21,9 +21,11 @@ export class CameraService {
   private tx = 80;
   private ty = 80;
   private host;
-  constructor() {
+
+  onModuleInit() {
     this.host = process.env.SERVER;
     this.initRecorder();
+    throw new Error('Method not implemented.');
   }
 
   initRecorder() {
