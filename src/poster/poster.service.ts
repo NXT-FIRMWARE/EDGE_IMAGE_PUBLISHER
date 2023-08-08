@@ -27,7 +27,7 @@ export class PosterService implements OnModuleInit {
     this.path = process.env.IMAGES_PATH;
   }
 
-  //@Cron('* * * * *')
+  @Cron('* * * * *')
   async filesUploader() {
     this.cameraConfig = this.cameraService.getCamraConfig();
     this.logger.log('[d]  upload files to server ...');
