@@ -27,6 +27,7 @@ export class CameraService implements OnModuleInit {
     this.initRecorder();
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   initRecorder() {
     this.CameraConfig = data;
     console.log('init Recorder');
@@ -101,6 +102,7 @@ export class CameraService implements OnModuleInit {
       });
     });
   }
+
   async PosteCreateId(
     fullPath: string,
     cameraName: string,
@@ -150,7 +152,7 @@ export class CameraService implements OnModuleInit {
     const image = await fs.createReadStream(fullPath);
     formDataRequest.append('images', image || '');
     // data.append('id', data[cameraIndex].uuid);
-    //data.append('time', new Date().toLocaleString());
+    formDataRequest.append('time', new Date().toLocaleString());
     formDataRequest.append('status', 'success' || '');
     formDataRequest.append('location', process.env.LOCATION || '');
     formDataRequest.append('name', cameraName || '');
