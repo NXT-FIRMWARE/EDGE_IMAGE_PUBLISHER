@@ -76,7 +76,7 @@ export class CameraService implements OnModuleInit {
         ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
       ctx.lineWidth = 2;
-      ctx.font = 'bold 70pt Menlo';
+      ctx.font = 'bold 40pt Menlo';
       ctx.fillText(
         `Environment SENSOR VALUE : ${number}
       `,
