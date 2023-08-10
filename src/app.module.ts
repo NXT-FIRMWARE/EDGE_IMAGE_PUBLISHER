@@ -4,6 +4,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CameraModule } from './camera/camera.module';
 import { PosterModule } from './poster/poster.module';
 import { EventsModule } from './events/events.module';
+import { SerialModule } from './serial/serial.module';
+import { MqttModule } from './mqtt/mqtt.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { EventsModule } from './events/events.module';
     CameraModule,
     EventsModule,
     PosterModule,
+    SerialModule,
+    MqttModule,
   ],
   controllers: [],
   providers: [],

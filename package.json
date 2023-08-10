@@ -35,10 +35,12 @@
     "class-validator": "^0.14.0",
     "easy-ftp": "^0.4.2",
     "form-data": "^4.0.0",
+    "mqtt": "^5.0.2",
     "multer": "^1.4.5-lts.1",
     "node-rtsp-recorder": "^1.0.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "serialport": "^11.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
