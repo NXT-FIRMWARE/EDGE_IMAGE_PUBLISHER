@@ -5,12 +5,5 @@
         "cameraName": "edge_00a74f7fba9a_camera1",
         "ip" : "192.168.20.10",
         "uuid":"64d210f7c0952a217c5b88b4"
-    },
-    {
-        "id" : 2,
-        "url": "rtsp://192.168.30.190:554/stream1",
-        "cameraName": "edge_00a74f7fba9a_camera2",
-        "ip" : "192.168.30.190",
-        "uuid":"64d20e31c0952a217c5b88a3"
     }
 ]
