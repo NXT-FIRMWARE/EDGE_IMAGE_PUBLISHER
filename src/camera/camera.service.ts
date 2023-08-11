@@ -33,10 +33,10 @@ export class CameraService implements OnModuleInit {
       await data.map((camera) => {
         try {
           execSync(`sudo ping -c 5 ${camera.ip}`).toString();
-          console.log(`ping  success  to ${camera.ip}`)
+          console.log(`ping  success  to ${camera.ip}`);
           this.connected_camera.push(camera);
         } catch (error) {
-          console.log(`ping not success  to ${camera.ip}`)
+          console.log(`ping not success  to ${camera.ip}`);
         }
       });
       this.CameraConfig = this.connected_camera;

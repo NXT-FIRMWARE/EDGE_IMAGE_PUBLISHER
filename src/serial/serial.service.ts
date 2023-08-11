@@ -49,45 +49,84 @@ export class SerialService {
         decoded.push({ variable: 'DevAddr', value: devAddr });
         decoded.push({ variable: 'DevEUI', value: devEUI });
         decoded.push({ variable: 'AppEUI', value: appEUI });
-        decoded.push({
-          variable: 'lvlcm',
-          value: (payload[Offset + 12] | (payload[Offset + 13] << 8)) / 10,
-          unit: 'cm',
-        });
-        decoded.push({
-          variable: 'temperature',
-          value: (payload[Offset + 0] | (payload[Offset + 1] << 8)) / 100,
-          unit: '°C',
-        });
-        decoded.push({
-          variable: 'humidity',
-          value: (payload[Offset + 2] | (payload[Offset + 3] << 8)) / 100,
-          unit: '%',
-        });
-        decoded.push({
-          variable: 'pressure',
-          value:
-            (payload[Offset + 7] << 24) |
-            (payload[Offset + 6] << 16) |
-            (payload[Offset + 5] << 8) |
-            payload[Offset + 4],
-          unit: 'Pa',
-        });
-        decoded.push({
-          variable: 'battery',
-          value: (payload[Offset + 8] | (payload[Offset + 9] << 8)) / 100,
-          unit: 'V',
-        });
-        decoded.push({
-          variable: 'solar',
-          value: (payload[Offset + 10] | (payload[Offset + 11] << 8)) / 100,
-          unit: 'V',
-        });
 
-        this.mqttClient.publishMessage(
-          'data/A3B2C2D2/events',
-          JSON.stringify(decoded),
-        );
+        //check devices
+        if (devAddr === 'A2B2C2D2') {
+          decoded.push({
+            variable: 'lvlcm',
+            value: (payload[Offset + 12] | (payload[Offset + 13] << 8)) / 10,
+            unit: 'cm',
+          });
+          decoded.push({
+            variable: 'temperature',
+            value: (payload[Offset + 0] | (payload[Offset + 1] << 8)) / 100,
+            unit: '°C',
+          });
+          decoded.push({
+            variable: 'humidity',
+            value: (payload[Offset + 2] | (payload[Offset + 3] << 8)) / 100,
+            unit: '%',
+          });
+          decoded.push({
+            variable: 'pressure',
+            value:
+              (payload[Offset + 7] << 24) |
+              (payload[Offset + 6] << 16) |
+              (payload[Offset + 5] << 8) |
+              payload[Offset + 4],
+            unit: 'Pa',
+          });
+          decoded.push({
+            variable: 'battery',
+            value: (payload[Offset + 8] | (payload[Offset + 9] << 8)) / 100,
+            unit: 'V',
+          });
+          decoded.push({
+            variable: 'solar',
+            value: (payload[Offset + 10] | (payload[Offset + 11] << 8)) / 100,
+            unit: 'V',
+          });
+
+          this.mqttClient.publishMessage(
+            'data/A3B2C2D2/events',
+            JSON.stringify(decoded),
+          );
+        } else if (devAddr === 'A6B6C2D2') {
+          decoded.push({
+            variable: 'temperature',
+            value: (payload[Offset + 0] | (payload[Offset + 1] << 8)) / 100,
+            unit: '°C',
+          });
+          decoded.push({
+            variable: 'humidity',
+            value: (payload[Offset + 2] | (payload[Offset + 3] << 8)) / 100,
+            unit: '%',
+          });
+          decoded.push({
+            variable: 'pressure',
+            value:
+              (payload[Offset + 7] << 24) |
+              (payload[Offset + 6] << 16) |
+              (payload[Offset + 5] << 8) |
+              payload[Offset + 4],
+            unit: 'Pa',
+          });
+          decoded.push({
+            variable: 'battery',
+            value: (payload[Offset + 8] | (payload[Offset + 9] << 8)) / 100,
+            unit: 'V',
+          });
+          decoded.push({
+            variable: 'solar',
+            value: (payload[Offset + 10] | (payload[Offset + 11] << 8)) / 100,
+            unit: 'V',
+          });
+
+          this.mqttClient.publishMessage2(
+            'data/A6B6C2D2/events',
+            JSON.stringify(decoded),
+          );
+        }
       }
     } catch (error: any) {
       console.log(`Error reading data: ${error.message}`);
