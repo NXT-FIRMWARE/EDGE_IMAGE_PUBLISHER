@@ -1,7 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
 import * as data from './data.json';
-import { createCanvas, loadImage } from 'canvas';
 import * as FormData from 'form-data';
 import * as fs from 'fs';
 import axios from 'axios';
