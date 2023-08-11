@@ -119,6 +119,7 @@ export class CameraService implements OnModuleInit {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     console.log(cameraName);
     const formDataRequest = new FormData();
+    console.log(fullPath);
     const image = await fs.createReadStream(fullPath);
     formDataRequest.append('images', image || '');
     // data.append('id', data[cameraIndex].uuid);
