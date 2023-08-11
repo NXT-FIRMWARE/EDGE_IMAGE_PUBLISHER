@@ -40,7 +40,7 @@ export class MqttService {
   }
   publishMessage2(topic: string, data: string) {
     //this.logger.log('publish', data);
-    this.client.publish(topic, data);
+    this.client2.publish(topic, data);
   }
   onMessage(topic: string, message: string) {
     // console.log('message arrived');

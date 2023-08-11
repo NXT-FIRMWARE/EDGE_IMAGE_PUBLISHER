@@ -129,7 +129,7 @@ export class SerialService {
         }
       }
     } catch (error: any) {
-      console.log(`Error reading data: ${error.message}`);
+      //console.log(`Error reading data: ${error.message}`);
     }
   }
 }
