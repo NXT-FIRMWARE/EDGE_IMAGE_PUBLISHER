@@ -79,7 +79,10 @@ export class SerialService {
           unit: 'V',
         });
 
-        this.mqttClient.publish('', decoded.toString());
+        this.mqttClient.publishMessage(
+          'data/A3B2C2D2/events',
+          decoded.toString(),
+        );
       }
     } catch (error: any) {
       console.log(`Error reading data: ${error.message}`);
