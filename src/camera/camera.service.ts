@@ -5,6 +5,7 @@ import * as FormData from 'form-data';
 import * as fs from 'fs';
 import axios from 'axios';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { execSync } from 'child_process';
 interface Recorder {
   recorder: any;
   id: string;
@@ -20,30 +21,39 @@ export class CameraService implements OnModuleInit {
   private tx = 80;
   private ty = 80;
   private host;
-
+  private connected_camera = [];
   onModuleInit() {
     this.host = process.env.SERVER;
     this.initRecorder();
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  initRecorder() {
+  async initRecorder() {
     try {
-      this.CameraConfig = data;
+      await data.map((camera) => {
+        try {
+          execSync(`sudo ping -c 5 ${camera.ip}`).toString();
+          console.log(`ping  success  to ${camera.ip}`)
+          this.connected_camera.push(camera);
+        } catch (error) {
+          console.log(`ping not success  to ${camera.ip}`)
+        }
+      });
+      this.CameraConfig = this.connected_camera;
       console.log('init Recorder');
-      for (let i = 0; i < data.length; i++) {
+      for (let i = 0; i < this.CameraConfig.length; i++) {
         const rec = new Recorder({
-          camera: data[i].cameraName,
+          camera: this.CameraConfig[i].cameraName,
           folder: process.env.IMAGES_PATH,
           year: this.date.getFullYear().toString(),
           month: (this.date.getMonth() + 1).toString(),
           day: this.date.getDate().toString(),
           type: 'image',
-          url: data[i].url,
+          url: this.CameraConfig[i].url,
         });
         this.recorder.push({
           recorder: rec,
-          id: data[i].ip,
+          id: this.CameraConfig[i].ip,
         });
       }
     } catch (error) {
