@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { SerialPort } from 'serialport';
 import { DelimiterParser } from '@serialport/parser-delimiter';
-import { MqttClient } from 'mqtt/*';
+import { MqttService } from 'src/mqtt/mqtt.service';
 @Injectable()
 export class SerialService {
   private lora_device;
   private lora_parser;
-  constructor(private readonly mqttClient:MqttClient) {
+  constructor(private readonly mqttClient: MqttService) {
     try {
       this.lora_device = new SerialPort({
         path: '/dev/ttyS0',
