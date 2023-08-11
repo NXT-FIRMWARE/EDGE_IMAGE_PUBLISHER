@@ -24,7 +24,8 @@ export class MqttService {
     this.client.subscribe('#');
   }
 
-  publishMessage(data: string, topic: string) {
+  publishMessage(topic: string, data: string) {
+    this.logger.log('publish', data);
     this.client.publish(topic, data);
   }
   onMessage(topic: string, message: string) {
