@@ -44,7 +44,7 @@ export class SerialService {
         console.log(`${date} - ${devAddr} - ${payload.toString('hex')}`);
         //decode Message
         const decoded = [];
-        const Offset = 37;
+        const Offset = 38;
 
         decoded.push({ variable: 'DevAddr', value: devAddr });
         decoded.push({ variable: 'DevEUI', value: devEUI });
