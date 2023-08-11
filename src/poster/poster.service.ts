@@ -54,9 +54,9 @@ export class PosterService implements OnModuleInit {
             ),
           );
           for (let daysIndex = 0; daysIndex < daysPath.length; daysIndex++) {
-            console.log(
-              `${this.path}/${cameraPath[camerIndex]}/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
-            );
+            // console.log(
+            //   `${this.path}/${cameraPath[camerIndex]}/${yearsPath[yearsIndex]}/${monthsPath[monthsIndex]}/${daysPath[daysIndex]}`,
+            // );
 
             const files = fs.readdirSync(
               path.join(
@@ -67,9 +67,9 @@ export class PosterService implements OnModuleInit {
                 daysPath[daysIndex],
               ),
             );
-            console.log(files);
+           // console.log(files);
             for (let i = 0; i < files.length && files.length > 5; i++) {
-              console.log('uploading');
+              //console.log('uploading');
               this.PostImage(
                 cameraPath[camerIndex],
                 path.join(
@@ -111,15 +111,15 @@ export class PosterService implements OnModuleInit {
     const data = new FormData();
     const image = await fs.createReadStream(fullPath);
     data.append('images', image || '');
-    console.log('camera config');
-    console.log(cameraIndex);
+    // console.log('camera config');
+    // console.log(cameraIndex);
     data.append('time', new Date().toLocaleString());
     data.append('status', 'success');
     data.append('location', process.env.LOCATION || '');
     data.append('name', cameraName || '');
-    console.log(
-      `push to .... ${process.env.SERVER}/camera/${this.cameraConfig[cameraIndex].uuid}/image`,
-    );
+    // console.log(
+    //   `push to .... ${process.env.SERVER}/camera/${this.cameraConfig[cameraIndex].uuid}/image`,
+    // );
     await axios
       .post(
         `${process.env.SERVER}/camera/${this.cameraConfig[cameraIndex].uuid}/image`,
@@ -134,14 +134,14 @@ export class PosterService implements OnModuleInit {
       )
       .then((response) => {
         //handle success
-        console.log(response.data);
+        //console.log(response.data);
         //delete image
         this.deleteImage(`${fullPath}`);
         //To  DO remove image from folder
       })
       .catch((error) => {
         //handle error
-        console.log(`${error}`);
+        //console.log(`${error}`);
       });
   }
   async deleteImage(path: string) {

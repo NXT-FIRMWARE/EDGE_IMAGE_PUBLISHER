@@ -47,7 +47,7 @@ export class CameraService implements OnModuleInit {
         });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
@@ -57,16 +57,16 @@ export class CameraService implements OnModuleInit {
     for (let i = 0; i < this.recorder.length; i++) {
       await this.recorder[i].recorder.captureImage(async (fullPath, error) => {
         if (error) {
-          console.log(error);
+          //console.log(error);
           return false;
         }
-        console.log('image saved sucefully');
+        //console.log('image saved sucefully');
 
         if (this.CameraConfig[i].uuid === '') {
-          this.logger.log('call create with this image');
+          //('call create with this image');
           this.PosteCreateId(fullPath, this.CameraConfig[i].cameraName, i);
         } else {
-          this.logger.log('call post with this image');
+          //this.logger.log('call post with this image');
           this.PostImage(fullPath, this.CameraConfig[i].cameraName, i);
         }
       });
@@ -95,8 +95,8 @@ export class CameraService implements OnModuleInit {
       })
       .then((response) => {
         //handle success
-        this.logger.log('response from server :');
-        this.logger.log(response.data);
+        //this.logger.log('response from server :');
+        //this.logger.log(response.data);
         //load id camera
         this.CameraConfig[indexCamera].uuid = response.data._id;
         fs.writeFileSync(
@@ -108,7 +108,7 @@ export class CameraService implements OnModuleInit {
       })
       .catch((error) => {
         //handle error
-        this.logger.error(`${error}`);
+        //this.logger.error(`${error}`);
       });
   }
 
@@ -117,9 +117,9 @@ export class CameraService implements OnModuleInit {
   }
   async PostImage(fullPath: string, cameraName: string, cameraIndex: number) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
-    console.log(cameraName);
+    //console.log(cameraName);
     const formDataRequest = new FormData();
-    console.log(fullPath);
+    //console.log(fullPath);
     const image = await fs.createReadStream(fullPath);
     formDataRequest.append('images', image || '');
     // data.append('id', data[cameraIndex].uuid);
@@ -127,11 +127,11 @@ export class CameraService implements OnModuleInit {
     formDataRequest.append('status', 'success' || '');
     formDataRequest.append('location', process.env.LOCATION || '');
     formDataRequest.append('name', cameraName || '');
-    this.logger.log(
-      `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
-    );
+    // this.logger.log(
+    //   `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+    // );
     try {
-      console.log('post image ....');
+      //console.log('post image ....');
       const result = await axios.post(
         `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
         formDataRequest,
@@ -143,11 +143,11 @@ export class CameraService implements OnModuleInit {
           },
         },
       );
-      this.logger.log(result.data);
+      //this.logger.log(result.data);
       //delete image
       this.deleteImage(fullPath);
     } catch (error) {
-      this.logger.error(error);
+      //this.logger.error(error);
     }
   }
 

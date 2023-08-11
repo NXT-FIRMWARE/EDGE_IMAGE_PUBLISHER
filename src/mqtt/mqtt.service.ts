@@ -13,7 +13,7 @@ export class MqttService {
       password: 'b162117c-adbe-41a6-aef9-47ce45d02c15',
       clientId: 'b162117c-adbe-41a6-aef9-47ce45d02c15',
     });
-    console.log(process.env.SERVER_MQTT);
+    //console.log(process.env.SERVER_MQTT);
     this.client.on('connect', this.onConnect.bind(this));
     this.client.on('message', this.onMessage.bind(this));
   }
@@ -28,7 +28,7 @@ export class MqttService {
     this.client.publish(topic, data);
   }
   onMessage(topic: string, message: string) {
-    console.log('message arrived');
-    console.log(message.toString());
+    // console.log('message arrived');
+    // console.log(message.toString());
   }
 }
