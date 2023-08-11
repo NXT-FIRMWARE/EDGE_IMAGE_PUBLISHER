@@ -81,7 +81,7 @@ export class SerialService {
 
         this.mqttClient.publishMessage(
           'data/A3B2C2D2/events',
-          decoded.toString(),
+          JSON.stringify(decoded),
         );
       }
     } catch (error: any) {
