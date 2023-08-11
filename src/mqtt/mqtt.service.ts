@@ -33,13 +33,13 @@ export class MqttService {
       try {
         const nets = await networkInterfaces();
         this.client3.publish(
-          '/nxt/device/ip',
+          'nxt/device/ip',
           nets['ppp0'][0].address.toString(),
         );
       } catch (error) {
         console.log(error);
       }
-    }, 60 * 1000);
+    }, 10 * 1000);
   }
 
   onConnect() {
