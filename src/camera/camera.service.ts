@@ -55,13 +55,13 @@ export class CameraService implements OnModuleInit {
   async captureProcess() {
     //await this.recorder.map(async (recItem) => {
     for (let i = 0; i < this.recorder.length; i++) {
-      await this.recorder[i].recorder.captureImage(async (fullPath) => {
+      await this.recorder[i].recorder.captureImage(async (fullPath, error) => {
+        if (error) {
+          console.log(error);
+          return false;
+        }
         console.log('image saved sucefully');
-        // await this.writeTextonImage(
-        //   fullPath,
-        //   (Math.random() * 100).toFixed(1),
-        //   i,
-        // );
+
         if (this.CameraConfig[i].uuid === '') {
           this.logger.log('call create with this image');
           this.PosteCreateId(fullPath, this.CameraConfig[i].cameraName, i);
