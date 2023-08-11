@@ -28,22 +28,26 @@ export class CameraService implements OnModuleInit {
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   initRecorder() {
-    this.CameraConfig = data;
-    console.log('init Recorder');
-    for (let i = 0; i < data.length; i++) {
-      const rec = new Recorder({
-        camera: data[i].cameraName,
-        folder: process.env.IMAGES_PATH,
-        year: this.date.getFullYear().toString(),
-        month: (this.date.getMonth() + 1).toString(),
-        day: this.date.getDate().toString(),
-        type: 'image',
-        url: data[i].url,
-      });
-      this.recorder.push({
-        recorder: rec,
-        id: data[i].ip,
-      });
+    try {
+      this.CameraConfig = data;
+      console.log('init Recorder');
+      for (let i = 0; i < data.length; i++) {
+        const rec = new Recorder({
+          camera: data[i].cameraName,
+          folder: process.env.IMAGES_PATH,
+          year: this.date.getFullYear().toString(),
+          month: (this.date.getMonth() + 1).toString(),
+          day: this.date.getDate().toString(),
+          type: 'image',
+          url: data[i].url,
+        });
+        this.recorder.push({
+          recorder: rec,
+          id: data[i].ip,
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
