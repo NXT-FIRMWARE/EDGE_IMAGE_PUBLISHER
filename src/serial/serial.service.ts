@@ -9,7 +9,7 @@ export class SerialService {
   constructor(private readonly mqttClient:MqttClient) {
     try {
       this.lora_device = new SerialPort({
-        path: '/dev/ttyS2',
+        path: '/dev/ttyS0',
         baudRate: 115200,
       });
       this.lora_parser = this.lora_device.pipe(
