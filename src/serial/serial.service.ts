@@ -50,6 +50,11 @@ export class SerialService {
         decoded.push({ variable: 'DevEUI', value: devEUI });
         decoded.push({ variable: 'AppEUI', value: appEUI });
         decoded.push({
+          variable: 'lvlcm',
+          value: (payload[Offset + 12] | (payload[Offset + 13] << 8)) / 10,
+          unit: 'cm',
+        });
+        decoded.push({
           variable: 'temperature',
           value: (payload[Offset + 0] | (payload[Offset + 1] << 8)) / 100,
           unit: '°C',
