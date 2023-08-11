@@ -70,39 +70,6 @@ export class CameraService implements OnModuleInit {
     }
   }
 
-  async writeTextonImage(fullPath: string, number, index: number) {
-    await loadImage(fullPath).then(async (img) => {
-      const canvas = createCanvas(img.width, img.height),
-        ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      ctx.lineWidth = 2;
-      ctx.font = 'bold 40pt Menlo';
-      ctx.fillText(
-        `Environment SENSOR VALUE : ${number}
-      `,
-        this.tx,
-        this.ty,
-      );
-      const out = await fs.createWriteStream(fullPath),
-        stream = canvas.createPNGStream();
-      stream.pipe(out);
-      out.on('finish', () => {
-        console.log(this.CameraConfig[index]);
-        if (this.CameraConfig[index].uuid === '') {
-          this.logger.log('call create with this image');
-          this.PosteCreateId(
-            fullPath,
-            this.CameraConfig[index].cameraName,
-            index,
-          );
-        } else {
-          this.logger.log('call post with this image');
-          this.PostImage(fullPath, this.CameraConfig[index].cameraName, index);
-        }
-      });
-    });
-  }
-
   async PosteCreateId(
     fullPath: string,
     cameraName: string,

@@ -8,7 +8,11 @@ export class MqttService {
   private logger = new Logger(MqttService.name);
 
   constructor() {
-    this.client = mqtt.connect(`mqtt://${process.env.MQTT_BROKER}:1883`);
+    this.client = mqtt.connect(`mqtt://${process.env.MQTT_BROKER}:1883`, {
+      username: 'b162117c-adbe-41a6-aef9-47ce45d02c15',
+      password: 'b162117c-adbe-41a6-aef9-47ce45d02c15',
+      clientId: 'b162117c-adbe-41a6-aef9-47ce45d02c15',
+    });
     console.log(process.env.SERVER_MQTT);
     this.client.on('connect', this.onConnect.bind(this));
     this.client.on('message', this.onMessage.bind(this));
