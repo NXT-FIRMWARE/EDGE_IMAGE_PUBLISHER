@@ -88,7 +88,7 @@ export class SerialService {
           });
 
           this.mqttClient.publishMessage(
-            'data/A3B2C2D2/events',
+            'data/A2B2C2D2/events',
             JSON.stringify(decoded),
           );
         } else if (devAddr === 'A6B6C2D2') {
