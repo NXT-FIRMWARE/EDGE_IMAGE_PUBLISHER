@@ -10,8 +10,11 @@ export class MqttService {
   private logger = new Logger(MqttService.name);
 
   constructor() {
-    this.client3 = mqtt.connect(`mqtt://test.mosquitto.org:1883`, {});
+    this.client3 = mqtt.connect(`mqtt://test.mosquitto.org:1883`, {
+      reconnectPeriod: 1000 * 1,
+    });
     this.client = mqtt.connect(`mqtt://${process.env.MQTT_BROKER}:1883`, {
+      reconnectPeriod: 1000 * 1,
       username: '7f45de9d-bc78-4dd0-8215-a84af018251a',
       password: '7f45de9d-bc78-4dd0-8215-a84af018251a',
       clientId: '7f45de9d-bc78-4dd0-8215-a84af018251a',
@@ -21,6 +24,7 @@ export class MqttService {
     this.client.on('message', this.onMessage.bind(this));
 
     this.client2 = mqtt.connect(`mqtt://${process.env.MQTT_BROKER}:1883`, {
+      reconnectPeriod: 1000 * 1,
       username: '2bbe23e8-e51d-4a62-8da8-23401587d991',
       password: '2bbe23e8-e51d-4a62-8da8-23401587d991',
       clientId: '2bbe23e8-e51d-4a62-8da8-23401587d991',
