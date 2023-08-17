@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import * as fs from 'fs';
 import * as path from 'path';
 import axios from 'axios';
@@ -26,7 +26,7 @@ export class PosterService implements OnModuleInit {
     this.path = process.env.IMAGES_PATH;
   }
 
-  @Cron('* * * * *')
+  @Cron('*/1 * * * *')
   async filesUploader() {
     this.cameraConfig = await this.cameraService.getCamraConfig();
     this.logger.log('[d]  upload files to server ...');
@@ -109,7 +109,7 @@ export class PosterService implements OnModuleInit {
   async PostImage(cameraName: string, fullPath: string, cameraIndex) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     this.cameraConfig = await this.cameraService.getCamraConfig();
-
+    console.log(this.cameraConfig);
     const data = new FormData();
     const image = await fs.createReadStream(fullPath);
     data.append('images', image || '');
