@@ -108,6 +108,8 @@ export class PosterService implements OnModuleInit {
   }
   async PostImage(cameraName: string, fullPath: string, cameraIndex) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
+    this.cameraConfig = await this.cameraService.getCamraConfig();
+
     const data = new FormData();
     const image = await fs.createReadStream(fullPath);
     data.append('images', image || '');
