@@ -140,7 +140,7 @@ export class CameraService implements OnModuleInit {
       );
       this.logger.log(result.data);
       //delete image
-      this.deleteImage(fullPath);
+      //this.deleteImage(fullPath);
     } catch (error) {
       this.logger.error(error);
     }
