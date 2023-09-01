@@ -51,7 +51,9 @@ export class SerialService {
         decoded.push({ variable: 'AppEUI', value: appEUI });
 
         //check devices
+        console.log(devAddr)
         if (devAddr === 'A2B2C2D2') {
+          console.log('A2B2C2D2');
           decoded.push({
             variable: 'lvlcm',
             value: (payload[Offset + 12] | (payload[Offset + 13] << 8)) / 10,

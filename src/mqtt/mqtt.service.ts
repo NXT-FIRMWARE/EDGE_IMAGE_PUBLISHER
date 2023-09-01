@@ -49,7 +49,7 @@ export class MqttService {
   onConnect() {
     //console.log('connected');
     //to do determine topics and events
-    this.client.subscribe('#');
+    //this.client.subscribe('#');
   }
 
   publishMessage(topic: string, data: string) {
