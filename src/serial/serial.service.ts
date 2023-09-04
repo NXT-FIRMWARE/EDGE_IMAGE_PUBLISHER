@@ -21,7 +21,7 @@ export class SerialService {
     }
   }
   async onLoraData(buffer: Buffer) {
-    //console.log('data: ', buffer.toString());
+    console.log('data: ', buffer.toString());
     try {
       if (buffer != null && buffer.length > 2) {
         const byteBegin = buffer[0].toString(16).padStart(2, '0').toUpperCase();
