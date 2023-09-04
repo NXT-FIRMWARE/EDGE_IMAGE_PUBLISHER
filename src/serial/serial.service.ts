@@ -122,7 +122,7 @@ export class SerialService {
             unit: 'V',
           });
 
-          this.mqttClient.publishMessage2(
+          this.mqttClient.publishMessage(
             'data/A6B6C2D2/events',
             JSON.stringify(decoded),
           );

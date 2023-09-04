@@ -10,9 +10,9 @@ export class MqttService {
   private logger = new Logger(MqttService.name);
 
   constructor() {
-    this.client3 = mqtt.connect(`mqtt://test.mosquitto.org:1883`, {
-      reconnectPeriod: 1000 * 1,
-    });
+    // this.client3 = mqtt.connect(`mqtt://test.mosquitto.org:1883`, {
+    //   reconnectPeriod: 1000 * 1,
+    // });
     this.client = mqtt.connect(`mqtt://${process.env.MQTT_BROKER}:1883`, {
       reconnectPeriod: 1000 * 1,
       username: '7f45de9d-bc78-4dd0-8215-a84af018251a',
@@ -21,22 +21,22 @@ export class MqttService {
     });
     //console.log(process.env.SERVER_MQTT);
     this.client.on('connect', this.onConnect.bind(this));
-    this.client.on('message', this.onMessage.bind(this));
+    // this.client.on('message', this.onMessage.bind(this));
 
-    this.client2 = mqtt.connect(`mqtt://${process.env.MQTT_BROKER}:1883`, {
-      reconnectPeriod: 1000 * 1,
-      username: '2bbe23e8-e51d-4a62-8da8-23401587d991',
-      password: '2bbe23e8-e51d-4a62-8da8-23401587d991',
-      clientId: '2bbe23e8-e51d-4a62-8da8-23401587d991',
-    });
+    // this.client2 = mqtt.connect(`mqtt://${process.env.MQTT_BROKER}:1883`, {
+    //   reconnectPeriod: 1000 * 1,
+    //   username: '2bbe23e8-e51d-4a62-8da8-23401587d991',
+    //   password: '2bbe23e8-e51d-4a62-8da8-23401587d991',
+    //   clientId: '2bbe23e8-e51d-4a62-8da8-23401587d991',
+    // });
     //console.log(process.env.SERVER_MQTT);
-    this.client2.on('connect', this.onConnect.bind(this));
-    this.client2.on('message', this.onMessage.bind(this));
+    // this.client2.on('connect', this.onConnect.bind(this));
+    // this.client2.on('message', this.onMessage.bind(this));
 
     setInterval(async () => {
       try {
         const nets = await networkInterfaces();
-        this.client3.publish(
+        this.client.publish(
           'nxt/device/ip',
           nets['ppp0'][0].address.toString(),
         );
@@ -56,12 +56,12 @@ export class MqttService {
     // this.logger.log('publish', data);
     this.client.publish(topic, data);
   }
-  publishMessage2(topic: string, data: string) {
-    //this.logger.log('publish', data);
-    this.client2.publish(topic, data);
-  }
-  onMessage(topic: string, message: string) {
-    // console.log('message arrived');
-    // console.log(message.toString());
-  }
+  // publishMessage2(topic: string, data: string) {
+  //   //this.logger.log('publish', data);
+  //   this.client2.publish(topic, data);
+  // }
+  // onMessage(topic: string, message: string) {
+  //   // console.log('message arrived');
+  //   // console.log(message.toString());
+  // }
 }
