@@ -1,7 +1,7 @@
 [
     {
         "id" : 1,
-        "url": "rtsp://192.168.30.11:554/stream1",
+        "url": "rtsp://192.168.30.11:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream1",
         "cameraName": "edge_00a74f7fba9a_camera2",
         "ip" : "192.168.30.190",
         "uuid":"64e7a354b0d7e85b166078fa"
