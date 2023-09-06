@@ -10,7 +10,7 @@ export class MqttService {
   private logger = new Logger(MqttService.name);
 
   constructor() {
-    // this.client3 = mqtt.connect(`mqtt://test.mosquitto.org:1883`, {
+    // this.client = mqtt.connect(`mqtt://test.mosquitto.org:1883`, {
     //   reconnectPeriod: 1000 * 1,
     // });
     this.client = mqtt.connect(`mqtt://mqtt.digisense.es:1883`, {
@@ -19,7 +19,7 @@ export class MqttService {
       // keepalive: 300,
       // username: '7f45de9d-bc78-4dd0-8215-a84af018251a',
       // password: '7f45de9d-bc78-4dd0-8215-a84af018251a',
-      // clientId: 'edgelora001',
+      clientId: 'edgelora001',
     });
     // this.client = mqtt.connect(`mqtt://${process.env.MQTT_BROKER}:1883`, {
     //   // reconnectPeriod: 1000 * 1,
@@ -57,9 +57,9 @@ export class MqttService {
   }
 
   onConnect() {
-    // console.log('connected');
+    console.log('connected');
     //to do determine topics and events
-    this.client.subscribe('#');
+    //this.client.subscribe('#');
   }
 
   async publishMessage(topic: string, data: string) {
