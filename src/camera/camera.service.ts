@@ -23,6 +23,7 @@ export class CameraService implements OnModuleInit {
 
   onModuleInit() {
     this.host = process.env.SERVER;
+    this.logger.log(this.host);
     this.initRecorder();
   }
 
