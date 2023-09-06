@@ -63,6 +63,7 @@ export class CameraService implements OnModuleInit {
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   async captureProcess() {
+    this.logger.log('capture image')
     //await this.recorder.map(async (recItem) => {
     for (let i = 0; i < this.recorder.length; i++) {
       await this.recorder[i].recorder.captureImage(async (fullPath, error) => {
@@ -70,13 +71,13 @@ export class CameraService implements OnModuleInit {
           //console.log(error);
           return false;
         }
-        //console.log('image saved sucefully');
+        console.log('image saved sucefully');
 
         if (this.CameraConfig[i].uuid === '') {
           //('call create with this image');
           this.PosteCreateId(fullPath, this.CameraConfig[i].cameraName, i);
         } else {
-          //this.logger.log('call post with this image');
+          this.logger.log('call post with this image');
           this.PostImage(fullPath, this.CameraConfig[i].cameraName, i);
         }
       });
