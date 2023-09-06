@@ -10,13 +10,13 @@ export class MqttService {
   private logger = new Logger(MqttService.name);
 
   constructor() {
-    this.client2 = mqtt.connect(`mqtt://mqtt.tago.io:1883`, {
+    this.client3 = mqtt.connect(`mqtt://mqtt.tago.io:1883`, {
       reconnectPeriod: 1000 * 1,
       username: '7f45de9d-bc78-4dd0-8215-a84af018251a',
       password: '7f45de9d-bc78-4dd0-8215-a84af018251a',
       clientId: '7f45de9d-bc78-4dd0-8215-a84af018251a',
     });
-    this.client3 = mqtt.connect(`mqtt://mqtt.tago.io:1883`, {
+    this.client2 = mqtt.connect(`mqtt://mqtt.tago.io:1883`, {
       reconnectPeriod: 1000 * 1,
       username: '2bbe23e8-e51d-4a62-8da8-23401587d991',
       password: '2bbe23e8-e51d-4a62-8da8-23401587d991',
