@@ -5,7 +5,6 @@ import * as FormData from 'form-data';
 import * as fs from 'fs';
 import axios from 'axios';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { execSync } from 'child_process';
 interface Recorder {
   recorder: any;
   id: string;
@@ -21,60 +20,47 @@ export class CameraService implements OnModuleInit {
   private tx = 80;
   private ty = 80;
   private host;
-  private connected_camera = [];
+
   onModuleInit() {
     this.host = process.env.SERVER;
+    this.logger.log(this.host);
     this.initRecorder();
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  async initRecorder() {
-    try {
-      await data.map((camera) => {
-        try {
-          execSync(`sudo ping -c 5 ${camera.ip}`).toString();
-          console.log(`ping  success  to ${camera.ip}`);
-          this.connected_camera.push(camera);
-        } catch (error) {
-          console.log(`ping not success  to ${camera.ip}`);
-        }
+  initRecorder() {
+    this.CameraConfig = data;
+    console.log('init Recorder');
+    for (let i = 0; i < data.length; i++) {
+      const rec = new Recorder({
+        camera: data[i].cameraName,
+        folder: process.env.IMAGES_PATH,
+        year: this.date.getFullYear().toString(),
+        month: (this.date.getMonth() + 1).toString(),
+        day: this.date.getDate().toString(),
+        type: 'image',
+        url: data[i].url,
       });
-      this.CameraConfig = this.connected_camera;
-      console.log('init Recorder');
-      for (let i = 0; i < this.CameraConfig.length; i++) {
-        const rec = new Recorder({
-          camera: this.CameraConfig[i].cameraName,
-          folder: process.env.IMAGES_PATH,
-          year: this.date.getFullYear().toString(),
-          month: (this.date.getMonth() + 1).toString(),
-          day: this.date.getDate().toString(),
-          type: 'image',
-          url: this.CameraConfig[i].url,
-        });
-        this.recorder.push({
-          recorder: rec,
-          id: this.CameraConfig[i].ip,
-        });
-      }
-    } catch (error) {
-      //console.log(error);
+      this.recorder.push({
+        recorder: rec,
+        id: data[i].ip,
+      });
     }
   }
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   async captureProcess() {
-    this.logger.log('capture image')
     //await this.recorder.map(async (recItem) => {
     for (let i = 0; i < this.recorder.length; i++) {
-      await this.recorder[i].recorder.captureImage(async (fullPath, error) => {
-        if (error) {
-          //console.log(error);
-          return false;
-        }
+      await this.recorder[i].recorder.captureImage(async (fullPath) => {
         console.log('image saved sucefully');
-
+        // await this.writeTextonImage(
+        //   fullPath,
+        //   (Math.random() * 100).toFixed(1),
+        //   i,
+        // );
         if (this.CameraConfig[i].uuid === '') {
-          //('call create with this image');
+          this.logger.log('call create with this image');
           this.PosteCreateId(fullPath, this.CameraConfig[i].cameraName, i);
         } else {
           this.logger.log('call post with this image');
@@ -106,8 +92,8 @@ export class CameraService implements OnModuleInit {
       })
       .then((response) => {
         //handle success
-        //this.logger.log('response from server :');
-        //this.logger.log(response.data);
+        this.logger.log('response from server :');
+        this.logger.log(response.data);
         //load id camera
         this.CameraConfig[indexCamera].uuid = response.data._id;
         fs.writeFileSync(
@@ -119,7 +105,7 @@ export class CameraService implements OnModuleInit {
       })
       .catch((error) => {
         //handle error
-        //this.logger.error(`${error}`);
+        this.logger.error(`${error}`);
       });
   }
 
@@ -128,9 +114,8 @@ export class CameraService implements OnModuleInit {
   }
   async PostImage(fullPath: string, cameraName: string, cameraIndex: number) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
-    //console.log(cameraName);
+    console.log(cameraName);
     const formDataRequest = new FormData();
-    //console.log(fullPath);
     const image = await fs.createReadStream(fullPath);
     formDataRequest.append('images', image || '');
     // data.append('id', data[cameraIndex].uuid);
@@ -138,11 +123,11 @@ export class CameraService implements OnModuleInit {
     formDataRequest.append('status', 'success' || '');
     formDataRequest.append('location', process.env.LOCATION || '');
     formDataRequest.append('name', cameraName || '');
-    // this.logger.log(
-    //   `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
-    // );
+    this.logger.log(
+      `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+    );
     try {
-      //console.log('post image ....');
+      console.log('post image ....');
       const result = await axios.post(
         `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
         formDataRequest,
@@ -154,11 +139,11 @@ export class CameraService implements OnModuleInit {
           },
         },
       );
-      //this.logger.log(result.data);
+      this.logger.log(result.data);
       //delete image
-      this.deleteImage(fullPath);
+      //this.deleteImage(fullPath);
     } catch (error) {
-      //this.logger.error(error);
+      this.logger.error(error);
     }
   }
 
