@@ -48,7 +48,7 @@ export class CameraService implements OnModuleInit {
     }
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_30_MINUTES)
   async captureProcess() {
     //await this.recorder.map(async (recItem) => {
     for (let i = 0; i < this.recorder.length; i++) {
