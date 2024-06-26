@@ -117,19 +117,21 @@ export class CameraService implements OnModuleInit {
     console.log(cameraName);
     const formDataRequest = new FormData();
     const image = await fs.createReadStream(fullPath);
-    formDataRequest.append('images', image || '');
+    formDataRequest.append('image', image || '');
+    formDataRequest.append('mac',this.CameraConfig[cameraIndex].mac);
+
     // data.append('id', data[cameraIndex].uuid);
-    formDataRequest.append('time', new Date().toLocaleString());
-    formDataRequest.append('status', 'success' || '');
-    formDataRequest.append('location', process.env.LOCATION || '');
-    formDataRequest.append('name', cameraName || '');
+    // formDataRequest.append('time', new Date().toLocaleString());
+    // formDataRequest.append('status', 'success' || '');
+    // formDataRequest.append('location', process.env.LOCATION || '');
+    // formDataRequest.append('name', cameraName || '');
     this.logger.log(
-      `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+      `${this.host}/camera/${this.CameraConfig[cameraIndex].mac}/image`,
     );
     try {
       console.log('post image ....');
       const result = await axios.post(
-        `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+        `${this.host}/camera/${this.CameraConfig[cameraIndex].mac}/image`,
         formDataRequest,
         {
           headers: {
