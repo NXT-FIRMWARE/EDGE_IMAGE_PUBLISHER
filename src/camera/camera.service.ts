@@ -126,12 +126,12 @@ export class CameraService implements OnModuleInit {
     // formDataRequest.append('location', process.env.LOCATION || '');
     // formDataRequest.append('name', cameraName || '');
     this.logger.log(
-      `${this.host}/camera/${this.CameraConfig[cameraIndex].mac}/image`,
+      `${this.host}/camera/${this.CameraConfig[cameraIndex].mac}`,
     );
     try {
       console.log('post image ....');
       const result = await axios.post(
-        `${this.host}/camera/${this.CameraConfig[cameraIndex].mac}/image`,
+        `${this.host}/camera/${this.CameraConfig[cameraIndex].mac}`,
         formDataRequest,
         {
           headers: {
