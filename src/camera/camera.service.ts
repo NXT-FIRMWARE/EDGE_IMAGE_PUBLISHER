@@ -59,13 +59,9 @@ export class CameraService implements OnModuleInit {
         //   (Math.random() * 100).toFixed(1),
         //   i,
         // );
-        if (this.CameraConfig[i].uuid === '') {
-          this.logger.log('call create with this image');
-          this.PosteCreateId(fullPath, this.CameraConfig[i].cameraName, i);
-        } else {
+
           this.logger.log('call post with this image');
           this.PostImage(fullPath, this.CameraConfig[i].cameraName, i);
-        }
       });
     }
   }
